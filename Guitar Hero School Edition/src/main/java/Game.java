@@ -73,7 +73,7 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
 
             @Override
             public boolean buttonUp(Controller controller, int buttonCode) {
-               // System.out.println("BUTTON UP "+controller+" "+buttonCode);
+                handleButtonRelease(getButtonCode(buttonCode));
                 return false;
             }
 
@@ -191,7 +191,7 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
     }
     @Override
     public void keyReleased(KeyEvent e) {
-
+        handleButtonRelease(getButtonCode(e));
     }
 
 
@@ -295,6 +295,13 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         }else if(creditsIsActive){
             if (buttonCode == ButtonCode.GREEN){
                 credits.Select();
+            }
+        }
+    }
+    public void handleButtonRelease(ButtonCode buttonCode){
+        if(playIsActive){
+            if (buttonCode == ButtonCode.GREEN||buttonCode == ButtonCode.RED||buttonCode == ButtonCode.YELLOW||buttonCode == ButtonCode.BLUE||buttonCode == ButtonCode.ORANGE){
+                playScreen.FretReleased(buttonCode);
             }
         }
     }

@@ -20,13 +20,40 @@ public class PlayScreen {
     BufferedImage YellowFret;
     BufferedImage BlueFret;
     BufferedImage OrangeFret;
-    public PlayScreen(){
+
+    BufferedImage GreenFretPlayed;
+    BufferedImage GreenFretIdle;
+    BufferedImage RedFretPlayed;
+    BufferedImage RedFretIdle;
+    BufferedImage YellowFretPlayed;
+    BufferedImage YellowFretIdle;
+    BufferedImage BlueFretPlayed;
+    BufferedImage BlueFretIdle;
+    BufferedImage OrangeFretPlayed;
+    BufferedImage OrangeFretIdle;
+    BufferedImage HitBox;
+
+    public PlayScreen() {
         try {
-            GreenFret = ImageIO.read(new File("src/main/resources/GreenFret.png"));
-            RedFret = ImageIO.read(new File("src/main/resources/RedFret.png"));
-            YellowFret = ImageIO.read(new File("src/main/resources/YellowFret.png"));
-            BlueFret = ImageIO.read(new File("src/main/resources/BlueFret.png"));
-            OrangeFret = ImageIO.read(new File("src/main/resources/OrangeFret.png"));
+            GreenFretIdle = ImageIO.read(new File("src/main/resources/GreenFret.png"));
+            RedFretIdle = ImageIO.read(new File("src/main/resources/RedFret.png"));
+            YellowFretIdle = ImageIO.read(new File("src/main/resources/YellowFret.png"));
+            BlueFretIdle = ImageIO.read(new File("src/main/resources/BlueFret.png"));
+            OrangeFretIdle = ImageIO.read(new File("src/main/resources/OrangeFret.png"));
+
+            GreenFretPlayed = ImageIO.read(new File("src/main/resources/GreenFretPlayed.png"));
+            GreenFret = GreenFretIdle;
+            RedFretPlayed = ImageIO.read(new File("src/main/resources/RedFretPlayed.png"));
+            RedFret = RedFretIdle;
+            YellowFretPlayed = ImageIO.read(new File("src/main/resources/YellowFretPlayed.png"));
+            YellowFret = YellowFretIdle;
+            BlueFretPlayed = ImageIO.read(new File("src/main/resources/BlueFretPlayed.png"));
+            BlueFret = BlueFretIdle;
+            OrangeFretPlayed = ImageIO.read(new File("src/main/resources/OrangeFretPlayed.png"));
+            OrangeFret = OrangeFretIdle;
+            HitBox = ImageIO.read(new File("src/main/resources/Hitbox.png"));
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,11 +115,12 @@ public class PlayScreen {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(GreenFret, 250, 600,600,600, null);
-        g.drawImage(RedFret, 450, 600,600,600, null);
-        g.drawImage(YellowFret, 650, 600,600,600, null);
-        g.drawImage(BlueFret, 850, 600,600,600, null);
-        g.drawImage(OrangeFret, 1050, 600,600,600, null);
+        g.drawImage(HitBox, 0, 600, 2000, 550, null);
+        g.drawImage(GreenFret, 250, 600, 600, 600, null);
+        g.drawImage(RedFret, 450, 600, 600, 600, null);
+        g.drawImage(YellowFret, 650, 600, 600, 600, null);
+        g.drawImage(BlueFret, 850, 600, 600, 600, null);
+        g.drawImage(OrangeFret, 1050, 600, 600, 600, null);
         for (int i = 0; i < NoteList.size(); i++) {
             NoteList.get(i).Draw(g);
         }
@@ -140,7 +168,44 @@ public class PlayScreen {
             }
         }
     }
-    public void FretPressed(Game.ButtonCode buttonCode){
-        //if(buttonCode);
+
+    public void FretPressed(Game.ButtonCode buttonCode) {
+        if (buttonCode == Game.ButtonCode.GREEN) {
+            GreenFret = GreenFretPlayed;
+        }
+        if (buttonCode == Game.ButtonCode.RED) {
+            RedFret = RedFretPlayed;
+        }
+        if (buttonCode == Game.ButtonCode.YELLOW) {
+            YellowFret = YellowFretPlayed;
+        }
+        if (buttonCode == Game.ButtonCode.BLUE) {
+            BlueFret = BlueFretPlayed;
+        }
+        if (buttonCode == Game.ButtonCode.ORANGE) {
+            OrangeFret = OrangeFretPlayed;
+        }
+
     }
+
+    public void FretReleased(Game.ButtonCode buttonCode) {
+
+        if (buttonCode == Game.ButtonCode.GREEN) {
+            GreenFret = GreenFretIdle;
+        }
+        if (buttonCode == Game.ButtonCode.RED) {
+            RedFret = RedFretIdle;
+        }
+        if (buttonCode == Game.ButtonCode.YELLOW) {
+            YellowFret = YellowFretIdle;
+        }
+        if (buttonCode == Game.ButtonCode.BLUE) {
+            BlueFret = BlueFretIdle;
+        }
+        if (buttonCode == Game.ButtonCode.ORANGE) {
+            OrangeFret = OrangeFretIdle;
+        }
+
+    }
+
 }
