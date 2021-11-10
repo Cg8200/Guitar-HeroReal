@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition.iml" filepath="$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Guitar Hero School Edition.iml" filepath="$PROJECT_DIR$/.idea/modules/Guitar Hero School Edition.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition_main.iml" group="Guitar Hero School Edition" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Guitar_Hero_School_Edition_test.iml" group="Guitar Hero School Edition" />
     </modules>
   </component>
 </project>
