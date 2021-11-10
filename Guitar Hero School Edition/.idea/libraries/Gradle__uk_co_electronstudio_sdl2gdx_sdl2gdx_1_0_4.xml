@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: uk.co.electronstudio.sdl2gdx:sdl2gdx:1.0.4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/uk.co.electronstudio.sdl2gdx/sdl2gdx/1.0.4/3410971f35b85a327a1ba4e3bb5223d77ba611aa/sdl2gdx-1.0.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/uk.co.electronstudio.sdl2gdx/sdl2gdx/1.0.4/397f51948c469a91f522bba60bd6d0a3c0c10078/sdl2gdx-1.0.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
