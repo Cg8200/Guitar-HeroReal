@@ -289,14 +289,15 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
                 songSelect.Select();
             }
         }else if(playIsActive){
-            if (buttonCode == ButtonCode.GREEN||buttonCode == ButtonCode.RED||buttonCode == ButtonCode.YELLOW||buttonCode == ButtonCode.BLUE||buttonCode == ButtonCode.ORANGE){
-                playScreen.FretPressed(buttonCode);
+            if (buttonCode == ButtonCode.GREEN||buttonCode == ButtonCode.RED||buttonCode == ButtonCode.YELLOW||buttonCode == ButtonCode.BLUE||buttonCode == ButtonCode.ORANGE||buttonCode == ButtonCode.STRUM_UP||buttonCode == ButtonCode.STRUM_DOWN){
+                playScreen.ButtonPressed(buttonCode);
             }
-        }else if(creditsIsActive){
-            if (buttonCode == ButtonCode.GREEN){
+        }else if(creditsIsActive) {
+            if (buttonCode == ButtonCode.GREEN) {
                 credits.Select();
             }
         }
+
     }
     public void handleButtonRelease(ButtonCode buttonCode){
         if(playIsActive){

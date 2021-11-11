@@ -11,14 +11,16 @@ public class Note {
     int Width;
     int Height;
     int Speed;
-    boolean NoteIsActive;
+
+    NoteColor noteColor;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
   int ScreenHeight = (int) screenSize.getHeight();
     enum NoteColor {
         Green, Red, Yellow, Blue, Orange
     }
     public Note(Line.NoteType noteType,NoteColor noteColor){
-        NoteIsActive = true;
+        this.noteColor=noteColor;
+
         if(noteColor == NoteColor.Green){
             noteX = 295;
         }else if(noteColor == NoteColor.Red){
@@ -58,11 +60,19 @@ public class Note {
     }
     public void Update(){
         noteY=noteY+Speed;
-        if(noteY>ScreenHeight){
-            NoteIsActive = false;
-        }
     }
     public void Draw(Graphics g){
         g.drawImage(image, noteX, noteY,Width,Height, null);
+    }
+
+    public boolean isOnFret(int Y1,int Y2){
+      if(noteY>=Y1&&noteY<=Y2){
+          return true;
+      }else if(noteY+Height>=Y1&&noteY+Height<=Y2){
+        return true;
+      }else{
+          return false;
+      }
+
     }
 }

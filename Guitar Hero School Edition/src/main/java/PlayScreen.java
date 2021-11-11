@@ -14,49 +14,45 @@ public class PlayScreen {
     static Line currentLine;
     int frameCount = 0;
     static LinkedList<Line> linesList = new LinkedList<>();
-    static LinkedList<Note> NoteList = new LinkedList<>();
-    BufferedImage GreenFret;
-    BufferedImage RedFret;
-    BufferedImage YellowFret;
-    BufferedImage BlueFret;
-    BufferedImage OrangeFret;
+    static LinkedList<NoteSet> NoteSetList = new LinkedList<>();
+    Image GreenFret;
+    Image RedFret;
+    Image YellowFret;
+    Image BlueFret;
+    Image OrangeFret;
 
-    BufferedImage GreenFretPlayed;
-    BufferedImage GreenFretIdle;
-    BufferedImage RedFretPlayed;
-    BufferedImage RedFretIdle;
-    BufferedImage YellowFretPlayed;
-    BufferedImage YellowFretIdle;
-    BufferedImage BlueFretPlayed;
-    BufferedImage BlueFretIdle;
-    BufferedImage OrangeFretPlayed;
-    BufferedImage OrangeFretIdle;
-    BufferedImage HitBox;
+    Image GreenFretPlayed;
+    Image GreenFretIdle;
+    Image RedFretPlayed;
+    Image RedFretIdle;
+    Image YellowFretPlayed;
+    Image YellowFretIdle;
+    Image BlueFretPlayed;
+    Image BlueFretIdle;
+    Image OrangeFretPlayed;
+    Image OrangeFretIdle;
+    Image HitBox;
 
     public PlayScreen() {
-        try {
-            GreenFretIdle = ImageIO.read(new File("src/main/resources/GreenFret.png"));
-            RedFretIdle = ImageIO.read(new File("src/main/resources/RedFret.png"));
-            YellowFretIdle = ImageIO.read(new File("src/main/resources/YellowFret.png"));
-            BlueFretIdle = ImageIO.read(new File("src/main/resources/BlueFret.png"));
-            OrangeFretIdle = ImageIO.read(new File("src/main/resources/OrangeFret.png"));
 
-            GreenFretPlayed = ImageIO.read(new File("src/main/resources/GreenFretPlayed.png"));
+            GreenFretIdle = new Image("src/main/resources/GreenFret.png",250, 590, 600, 600,false);
+            RedFretIdle = new Image("src/main/resources/RedFret.png",450, 590, 600, 600,false);
+            YellowFretIdle = new Image("src/main/resources/YellowFret.png",650, 600, 600, 600,false );
+            BlueFretIdle = new Image("src/main/resources/BlueFret.png",850, 600, 600, 600,false);
+            OrangeFretIdle = new Image("src/main/resources/OrangeFret.png",1050, 600, 600, 600,false);
+
+            GreenFretPlayed = new Image("src/main/resources/GreenFretPlayed.png",245, 585, 600, 600,true);
             GreenFret = GreenFretIdle;
-            RedFretPlayed = ImageIO.read(new File("src/main/resources/RedFretPlayed.png"));
+            RedFretPlayed = new Image("src/main/resources/RedFretPlayed.png",430, 580, 600, 600,true);
             RedFret = RedFretIdle;
-            YellowFretPlayed = ImageIO.read(new File("src/main/resources/YellowFretPlayed.png"));
+            YellowFretPlayed = new Image("src/main/resources/YellowFretPlayed.png",640, 615, 600, 600 ,true);
             YellowFret = YellowFretIdle;
-            BlueFretPlayed = ImageIO.read(new File("src/main/resources/BlueFretPlayed.png"));
+            BlueFretPlayed =  new Image("src/main/resources/BlueFretPlayed.png",850, 600, 600, 600,true);
             BlueFret = BlueFretIdle;
-            OrangeFretPlayed = ImageIO.read(new File("src/main/resources/OrangeFretPlayed.png"));
+            OrangeFretPlayed =  new Image("src/main/resources/OrangeFretPlayed.png",1050, 580, 600, 600,true);
             OrangeFret = OrangeFretIdle;
-            HitBox = ImageIO.read(new File("src/main/resources/Hitbox.png"));
+            HitBox = new Image("src/main/resources/Hitbox.png",215, 670, 1500, 400,false);
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void loadSong(String pathname) {
@@ -115,14 +111,14 @@ public class PlayScreen {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(HitBox, 0, 600, 2000, 550, null);
-        g.drawImage(GreenFret, 250, 600, 600, 600, null);
-        g.drawImage(RedFret, 450, 600, 600, 600, null);
-        g.drawImage(YellowFret, 650, 600, 600, 600, null);
-        g.drawImage(BlueFret, 850, 600, 600, 600, null);
-        g.drawImage(OrangeFret, 1050, 600, 600, 600, null);
-        for (int i = 0; i < NoteList.size(); i++) {
-            NoteList.get(i).Draw(g);
+        g.drawImage(HitBox.image, HitBox.x, HitBox.y, HitBox.Width, HitBox.Height, null);
+        g.drawImage(GreenFret.image,GreenFret.x, GreenFret.y, GreenFret.Width, GreenFret.Height, null);
+        g.drawImage(RedFret.image, RedFret.x, RedFret.y, RedFret.Width, RedFret.Height, null);
+        g.drawImage(YellowFret.image, YellowFret.x, YellowFret.y, YellowFret.Width, YellowFret.Height, null);
+        g.drawImage(BlueFret.image, BlueFret.x, BlueFret.y, BlueFret.Width, BlueFret.Height, null);
+        g.drawImage(OrangeFret.image, OrangeFret.x, OrangeFret.y, OrangeFret.Width, OrangeFret.Height, null);
+        for (int i = 0; i < NoteSetList.size(); i++) {
+            NoteSetList.get(i).Draw(g);
         }
 
     }
@@ -132,22 +128,28 @@ public class PlayScreen {
         if (frameCount < currentLine.delay) {
             frameCount++;
         } else {
-            System.out.println(currentLine.Green + ", " + currentLine.Red + ", " + currentLine.Yellow + ", " + currentLine.Blue + ", " + currentLine.Orange + ", ");
+           // System.out.println(currentLine.Green + ", " + currentLine.Red + ", " + currentLine.Yellow + ", " + currentLine.Blue + ", " + currentLine.Orange + ", ");
+            Note greenNote=null;
+            Note redNote=null;
+            Note yellowNote=null;
+            Note blueNote=null;
+            Note orenageNote=null;
             if (currentLine.Green != Line.NoteType.none) {
-                NoteList.add(new Note(currentLine.Green, Note.NoteColor.Green));
+                greenNote=new Note(currentLine.Green, Note.NoteColor.Green);
             }
             if (currentLine.Red != Line.NoteType.none) {
-                NoteList.add(new Note(currentLine.Red, Note.NoteColor.Red));
+                redNote=new Note(currentLine.Red, Note.NoteColor.Red);
             }
             if (currentLine.Yellow != Line.NoteType.none) {
-                NoteList.add(new Note(currentLine.Yellow, Note.NoteColor.Yellow));
+                yellowNote=new Note(currentLine.Yellow, Note.NoteColor.Yellow);
             }
             if (currentLine.Blue != Line.NoteType.none) {
-                NoteList.add(new Note(currentLine.Blue, Note.NoteColor.Blue));
+                blueNote=new Note(currentLine.Blue, Note.NoteColor.Blue);
             }
             if (currentLine.Orange != Line.NoteType.none) {
-                NoteList.add(new Note(currentLine.Orange, Note.NoteColor.Orange));
+                orenageNote=new Note(currentLine.Orange, Note.NoteColor.Orange);
             }
+
 
             frameCount = 0;
             if (linesList.size() > 0) {
@@ -158,18 +160,18 @@ public class PlayScreen {
             }
 
         }
-        for (int i = 0; i < NoteList.size(); i++) {
-            NoteList.get(i).Update();
+        for (int i = 0; i < NoteSetList.size(); i++) {
+            NoteSetList.get(i).Update();
         }
-        for (int i = 0; i < NoteList.size(); i++) {
-            if (!NoteList.get(i).NoteIsActive) {
-                NoteList.remove(i);
+        for (int i = 0; i < NoteSetList.size(); i++) {
+            if (!NoteSetList.get(i).NoteIsActive) {
+                NoteSetList.remove(i);
                 i--;
             }
         }
     }
 
-    public void FretPressed(Game.ButtonCode buttonCode) {
+    public void ButtonPressed(Game.ButtonCode buttonCode) {
         if (buttonCode == Game.ButtonCode.GREEN) {
             GreenFret = GreenFretPlayed;
         }
@@ -185,7 +187,43 @@ public class PlayScreen {
         if (buttonCode == Game.ButtonCode.ORANGE) {
             OrangeFret = OrangeFretPlayed;
         }
+        if ((Game.ButtonCode.STRUM_UP == buttonCode || Game.ButtonCode.STRUM_DOWN == buttonCode)) {
+            boolean GreenNoteExpected = false;
+            boolean RedNoteExpected = false;
+            boolean YellowNoteExpected = false;
+            boolean BlueNoteExpected = false;
+            boolean OrangeNoteExpected = false;
+            for (int i = 0; i < NoteList.size(); i++) {
+                if (NoteList.get(i).isOnFret(HitBox.y, HitBox.y + HitBox.Height)) {
+                    if (NoteList.get(i).noteColor == Note.NoteColor.Green) {
+                        GreenNoteExpected = true;
+                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Red) {
+                        RedNoteExpected = true;
+                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Yellow) {
+                        YellowNoteExpected = true;
+                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Blue) {
+                        BlueNoteExpected = true;
+                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Orange) {
+                        OrangeNoteExpected = true;
+                    }
+                }
+            }
+            if (GreenNoteExpected == GreenFret.isPressed
+                    && RedNoteExpected == RedFret.isPressed
+                    && YellowNoteExpected == YellowFret.isPressed
+                    && BlueNoteExpected == BlueFret.isPressed
+                    && OrangeNoteExpected == OrangeFret.isPressed) {
 
+                System.out.println("YAY, WOOHOO!!!");
+                for (int i = 0; i < NoteList.size(); i++) {
+                    if (NoteList.get(i).isOnFret(HitBox.y, HitBox.y + HitBox.Height)) {
+                        NoteList.get(i).NoteIsActive=false;
+                    }
+                }
+            } else {
+                System.out.println("AWWW MAAAAN");
+            }
+        }
     }
 
     public void FretReleased(Game.ButtonCode buttonCode) {
@@ -207,5 +245,7 @@ public class PlayScreen {
         }
 
     }
+
+
 
 }
