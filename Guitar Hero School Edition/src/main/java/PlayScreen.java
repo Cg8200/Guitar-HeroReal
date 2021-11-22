@@ -1,10 +1,7 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.LinkedList;
 
 /**
@@ -32,26 +29,52 @@ public class PlayScreen {
     Image OrangeFretPlayed;
     Image OrangeFretIdle;
     Image HitBox;
+    Fire GreenFire;
+    Fire RedFire;
+    Fire YellowFire;
+    Fire BlueFire;
+    Fire OrangeFire;
 
+    Image GreenNoteGlow;
+    Image RedNoteGlow;
+    Image YellowNoteGlow;
+    Image BlueNoteGlow;
+    Image OrangeNoteGlow;
+    NoteSet lastNoteSetPlayed;
+
+    int noteStreak;
     public PlayScreen() {
+        lastNoteSetPlayed = new NoteSet(null, null,null,null,null);
+            GreenFretIdle = new Image("src/main/resources/GreenFret.png",710, 880, 80, 80,false);
+            RedFretIdle = new Image("src/main/resources/RedFret.png",810, 880, 80, 80,false);
+            YellowFretIdle = new Image("src/main/resources/YellowFret.png",910, 880, 80, 80,false );
+            BlueFretIdle = new Image("src/main/resources/BlueFret.png",1010, 880, 80, 80,false);
+            OrangeFretIdle = new Image("src/main/resources/OrangeFret.png",1110, 880, 80, 80,false);
 
-            GreenFretIdle = new Image("src/main/resources/GreenFret.png",250, 590, 600, 600,false);
-            RedFretIdle = new Image("src/main/resources/RedFret.png",450, 590, 600, 600,false);
-            YellowFretIdle = new Image("src/main/resources/YellowFret.png",650, 600, 600, 600,false );
-            BlueFretIdle = new Image("src/main/resources/BlueFret.png",850, 600, 600, 600,false);
-            OrangeFretIdle = new Image("src/main/resources/OrangeFret.png",1050, 600, 600, 600,false);
-
-            GreenFretPlayed = new Image("src/main/resources/GreenFretPlayed.png",245, 585, 600, 600,true);
+            GreenFretPlayed = new Image("src/main/resources/GreenFretPlayed.png",710, 880, 80, 80,true);
             GreenFret = GreenFretIdle;
-            RedFretPlayed = new Image("src/main/resources/RedFretPlayed.png",430, 580, 600, 600,true);
+            RedFretPlayed = new Image("src/main/resources/RedFretPlayed.png",810, 880, 80, 80,true);
             RedFret = RedFretIdle;
-            YellowFretPlayed = new Image("src/main/resources/YellowFretPlayed.png",640, 615, 600, 600 ,true);
+            YellowFretPlayed = new Image("src/main/resources/YellowFretPlayed.png",910, 880, 80, 80 ,true);
             YellowFret = YellowFretIdle;
-            BlueFretPlayed =  new Image("src/main/resources/BlueFretPlayed.png",850, 600, 600, 600,true);
+            BlueFretPlayed =  new Image("src/main/resources/BlueFretPlayed.png",1010, 880, 80, 80,true);
             BlueFret = BlueFretIdle;
-            OrangeFretPlayed =  new Image("src/main/resources/OrangeFretPlayed.png",1050, 580, 600, 600,true);
+            OrangeFretPlayed =  new Image("src/main/resources/OrangeFretPlayed.png",1110, 880, 80, 80,true);
             OrangeFret = OrangeFretIdle;
-            HitBox = new Image("src/main/resources/Hitbox.png",215, 670, 1500, 400,false);
+            HitBox = new Image("src/main/resources/Hitbox.png",650, 850, 600, 150,false);
+
+            GreenFire = new Fire("src/main/resources/fire.png",710, 880, 80, 80,false);
+            RedFire = new Fire("src/main/resources/fire.png",810, 880, 80, 80,false);
+            YellowFire = new Fire("src/main/resources/fire.png",910, 880, 80, 80,false);
+            BlueFire = new Fire("src/main/resources/fire.png",1010, 880, 80, 80,false);
+            OrangeFire = new Fire("src/main/resources/fire.png",1110, 880, 80, 80,false);
+
+        GreenNoteGlow = new Image("src/main/resources/GreenNoteGlow.png",710, 880, 80, 80,false);
+        RedNoteGlow = new Image("src/main/resources/RedNoteGlow.png",810, 880, 80, 80,false);
+        YellowNoteGlow = new Image("src/main/resources/YellowNoteGlow.png",910, 880, 80, 80,false);
+        BlueNoteGlow = new Image("src/main/resources/BlueNoteGlow.png",1010, 880, 80, 80,false);
+        OrangeNoteGlow = new Image("src/main/resources/OrangeNoteGlow.png",1110, 880, 80, 80,false);
+
 
     }
 
@@ -61,7 +84,6 @@ public class PlayScreen {
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
             while (br.ready()) {
-                //fixme  - logic to read from file
                 String lineOfFile = br.readLine();
                 String[] parsedline = lineOfFile.split(",");
                 if (parsedline.length != 6) {
@@ -120,7 +142,11 @@ public class PlayScreen {
         for (int i = 0; i < NoteSetList.size(); i++) {
             NoteSetList.get(i).Draw(g);
         }
-
+        GreenFire.Draw(g);
+        RedFire.Draw(g);
+        YellowFire.Draw(g);
+        BlueFire.Draw(g);
+        OrangeFire.Draw(g);
     }
 
 
@@ -133,7 +159,7 @@ public class PlayScreen {
             Note redNote=null;
             Note yellowNote=null;
             Note blueNote=null;
-            Note orenageNote=null;
+            Note orangeNote=null;
             if (currentLine.Green != Line.NoteType.none) {
                 greenNote=new Note(currentLine.Green, Note.NoteColor.Green);
             }
@@ -147,21 +173,28 @@ public class PlayScreen {
                 blueNote=new Note(currentLine.Blue, Note.NoteColor.Blue);
             }
             if (currentLine.Orange != Line.NoteType.none) {
-                orenageNote=new Note(currentLine.Orange, Note.NoteColor.Orange);
+                orangeNote=new Note(currentLine.Orange, Note.NoteColor.Orange);
             }
-
+            NoteSetList.add(new NoteSet(greenNote,redNote,yellowNote,blueNote,orangeNote));
 
             frameCount = 0;
             if (linesList.size() > 0) {
                 currentLine = linesList.remove();
             } else {
+                NoteSetList.remove(0);
+                GreenFret = GreenFretIdle;
+                RedFret = RedFretIdle;
+                YellowFret = YellowFretIdle;
+                BlueFret = BlueFretIdle;
+                OrangeFret = OrangeFretIdle;
                 Game.playIsActive = false;
                 Game.songSelectIsActive = true;
+                noteStreak = 0;
             }
 
         }
         for (int i = 0; i < NoteSetList.size(); i++) {
-            NoteSetList.get(i).Update();
+            NoteSetList.get(i).Update(HitBox.y+HitBox.Height);
         }
         for (int i = 0; i < NoteSetList.size(); i++) {
             if (!NoteSetList.get(i).NoteIsActive) {
@@ -188,42 +221,111 @@ public class PlayScreen {
             OrangeFret = OrangeFretPlayed;
         }
         if ((Game.ButtonCode.STRUM_UP == buttonCode || Game.ButtonCode.STRUM_DOWN == buttonCode)) {
-            boolean GreenNoteExpected = false;
-            boolean RedNoteExpected = false;
-            boolean YellowNoteExpected = false;
-            boolean BlueNoteExpected = false;
-            boolean OrangeNoteExpected = false;
-            for (int i = 0; i < NoteList.size(); i++) {
-                if (NoteList.get(i).isOnFret(HitBox.y, HitBox.y + HitBox.Height)) {
-                    if (NoteList.get(i).noteColor == Note.NoteColor.Green) {
-                        GreenNoteExpected = true;
-                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Red) {
-                        RedNoteExpected = true;
-                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Yellow) {
-                        YellowNoteExpected = true;
-                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Blue) {
-                        BlueNoteExpected = true;
-                    } else if (NoteList.get(i).noteColor == Note.NoteColor.Orange) {
-                        OrangeNoteExpected = true;
-                    }
-                }
-            }
-            if (GreenNoteExpected == GreenFret.isPressed
-                    && RedNoteExpected == RedFret.isPressed
-                    && YellowNoteExpected == YellowFret.isPressed
-                    && BlueNoteExpected == BlueFret.isPressed
-                    && OrangeNoteExpected == OrangeFret.isPressed) {
+          try {
+              if (aNoteOnFret()) {
+                  if (CorrectFrets(false)) {
 
-                System.out.println("YAY, WOOHOO!!!");
-                for (int i = 0; i < NoteList.size(); i++) {
-                    if (NoteList.get(i).isOnFret(HitBox.y, HitBox.y + HitBox.Height)) {
-                        NoteList.get(i).NoteIsActive=false;
+                      System.out.println(noteStreak);
+                      if (GreenFret.isPressed) {
+                          GreenFire.DisplayFire();
+                      }
+                      if (RedFret.isPressed) {
+                          RedFire.DisplayFire();
+                      }
+                      if (YellowFret.isPressed) {
+                          YellowFire.DisplayFire();
+                      }
+                      if (BlueFret.isPressed) {
+                          BlueFire.DisplayFire();
+                      }
+                      if (OrangeFret.isPressed) {
+                          OrangeFire.DisplayFire();
+                      }
+                      NotePlayed();
+                  } else {
+                      NoteMissed();
+                  }
+              } else {
+                  NoteMissed();
+              }
+          } catch (IndexOutOfBoundsException ex){
+              NoteMissed();
+          }
+        }
+        else if (noteStreak >= 1) {
+            if (aNoteOnFret()) {
+                if (CorrectFrets(true)) {
+                    boolean isWhite = false;
+                    if (GreenFret.isPressed) {
+                        if (NoteSetList.get(0).greenNote != null && NoteSetList.get(0).greenNote.noteType == Line.NoteType.white) {
+                            isWhite = true;
+                            GreenFire.DisplayFire();
+                        }
+                    } else if (RedFret.isPressed) {
+                        if (NoteSetList.get(0).redNote != null && NoteSetList.get(0).redNote.noteType == Line.NoteType.white) {
+                            isWhite = true;
+                            RedFire.DisplayFire();
+                        }
+                    }
+                    if (YellowFret.isPressed) {
+                        if (NoteSetList.get(0).yellowNote != null && NoteSetList.get(0).yellowNote.noteType == Line.NoteType.white) {
+                            isWhite = true;
+                            YellowFire.DisplayFire();
+                        }
+                    }
+                    if (BlueFret.isPressed) {
+                        if (NoteSetList.get(0).blueNote != null && NoteSetList.get(0).blueNote.noteType == Line.NoteType.white) {
+                            isWhite = true;
+                            BlueFire.DisplayFire();
+                        }
+                    }
+                    if (OrangeFret.isPressed) {
+                        if (NoteSetList.get(0).orangeNote != null && NoteSetList.get(0).orangeNote.noteType == Line.NoteType.white) {
+                            isWhite = true;
+                            OrangeFire.DisplayFire();
+                        }
+                    }
+                    if (isWhite) {
+                        NotePlayed();
                     }
                 }
-            } else {
-                System.out.println("AWWW MAAAAN");
             }
         }
+
+
+    }
+    public  void NoteMissed(){
+        System.out.println("AWWW MAAAAN");
+        noteStreak = 0;
+        lastNoteSetPlayed = new NoteSet(null, null,null,null,null);
+    }
+    public void NotePlayed(){
+        lastNoteSetPlayed = NoteSetList.get(0);
+        NoteSetList.get(0).NoteIsActive = false;
+        noteStreak = noteStreak + 1;
+    }
+    public boolean CorrectFrets(boolean includeLastNote){
+        boolean GreenNoteExpected = NoteSetList.get(0).greenNote != null || (includeLastNote && lastNoteSetPlayed.greenNote != null);
+        boolean RedNoteExpected = NoteSetList.get(0).redNote != null|| (includeLastNote && lastNoteSetPlayed.redNote != null);;
+        boolean YellowNoteExpected = NoteSetList.get(0).yellowNote != null|| (includeLastNote && lastNoteSetPlayed.yellowNote != null);;
+        boolean BlueNoteExpected = NoteSetList.get(0).blueNote != null|| (includeLastNote && lastNoteSetPlayed.blueNote != null);;
+        boolean OrangeNoteExpected = NoteSetList.get(0).orangeNote != null|| (includeLastNote && lastNoteSetPlayed.orangeNote != null);;
+
+        if (GreenNoteExpected == GreenFret.isPressed
+                && RedNoteExpected == RedFret.isPressed
+                && YellowNoteExpected == YellowFret.isPressed
+                && BlueNoteExpected == BlueFret.isPressed
+                && OrangeNoteExpected == OrangeFret.isPressed){
+            return true;
+        }
+        return false;
+    }
+    public boolean aNoteOnFret(){
+       return  (NoteSetList.get(0).greenNote != null && NoteSetList.get(0).greenNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height))
+                || (NoteSetList.get(0).redNote != null && NoteSetList.get(0).redNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height))
+                || (NoteSetList.get(0).yellowNote != null && NoteSetList.get(0).yellowNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height))
+                || (NoteSetList.get(0).blueNote != null && NoteSetList.get(0).blueNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height))
+                || (NoteSetList.get(0).orangeNote != null && NoteSetList.get(0).orangeNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height));
     }
 
     public void FretReleased(Game.ButtonCode buttonCode) {
@@ -244,8 +346,9 @@ public class PlayScreen {
             OrangeFret = OrangeFretIdle;
         }
 
+
+
+
+
     }
-
-
-
 }

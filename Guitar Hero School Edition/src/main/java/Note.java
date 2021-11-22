@@ -11,6 +11,7 @@ public class Note {
     int Width;
     int Height;
     int Speed;
+    Line.NoteType noteType;
 
     NoteColor noteColor;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -20,39 +21,53 @@ public class Note {
     }
     public Note(Line.NoteType noteType,NoteColor noteColor){
         this.noteColor=noteColor;
-
+        this.noteType = noteType;
         if(noteColor == NoteColor.Green){
-            noteX = 295;
+            noteX = 720;
         }else if(noteColor == NoteColor.Red){
-            noteX = 495;
+            noteX = 820;
         }else if(noteColor == NoteColor.Yellow){
-            noteX = 695;
+            noteX = 920;
         }else if(noteColor == NoteColor.Blue){
-            noteX = 895;
+            noteX = 1020;
         }else if(noteColor == NoteColor.Orange){
-            noteX = 1095;
+            noteX = 1120;
         }
         noteY = -20;
-        Width = 500;
-        Height = 300;
-        Speed = 20;
+        Width = 60;
+        Height = 60;
+        Speed = 10;
         try {
             if(noteColor == NoteColor.Green){
                 if(noteType == Line.NoteType.regular) {
                     image = ImageIO.read(new File("src/main/resources/GreenNote.png"));
+                }else if(noteType == Line.NoteType.white) {
+                    image = ImageIO.read(new File("src/main/resources/GreenNoteGlow.png"));
                 }
             }else if(noteColor == NoteColor.Red){
                 if(noteType == Line.NoteType.regular){
                 image = ImageIO.read(new File("src/main/resources/RedNote.png"));}
+                else if(noteType == Line.NoteType.white){
+                    image = ImageIO.read(new File("src/main/resources/RedNoteGlow.png"));
+                }
             }else if(noteColor == NoteColor.Yellow){
-                if(noteType == Line.NoteType.regular);{
+                if(noteType == Line.NoteType.regular){
                     image = ImageIO.read(new File("src/main/resources/YellowNote.png"));}
+                    else if(noteType == Line.NoteType.white){
+                    image = ImageIO.read(new File("src/main/resources/YellowNoteGlow.png"));
+                }
             }else if(noteColor == NoteColor.Blue){
                 if(noteType == Line.NoteType.regular){
                 image = ImageIO.read(new File("src/main/resources/BlueNote.png"));}
+                else if(noteType == Line.NoteType.white){
+                    image = ImageIO.read(new File("src/main/resources/BlueNoteGlow.png"));
+                }
             }else if(noteColor == NoteColor.Orange){
                 if(noteType == Line.NoteType.regular){
                 image = ImageIO.read(new File("src/main/resources/OrangeNote.png"));}
+                else if(noteType == Line.NoteType.white){
+                    image = ImageIO.read(new File("src/main/resources/OrangeNoteGlow.png"));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

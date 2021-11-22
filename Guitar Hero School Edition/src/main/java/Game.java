@@ -317,6 +317,3 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         game = new Game();
     }
 }
-
-
-

@@ -10,8 +10,6 @@ public class NoteSet {
     Note blueNote;
     Note orangeNote;
     boolean NoteIsActive;
-
-
     public NoteSet(Note greenNote, Note redNote, Note yellowNote, Note blueNote, Note orangeNote) {
         this.greenNote = greenNote;
         this.redNote = redNote;
@@ -20,7 +18,6 @@ public class NoteSet {
         this.orangeNote = orangeNote;
         NoteIsActive = true;
     }
-
     public void Draw(Graphics g) {
        if(greenNote!=null){
            greenNote.Draw(g);
@@ -38,35 +35,34 @@ public class NoteSet {
             orangeNote.Draw(g);
         }
     }
-    public void Update(){
-
+    public void Update(int yValueToRemove){
         if(greenNote!=null){
             greenNote.Update();
-            if(greenNote.noteY>greenNote.ScreenHeight){
+            if(greenNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
         else if(redNote!=null){
             redNote.Update();
-            if(redNote.noteY>redNote.ScreenHeight){
+            if(redNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
         else if(yellowNote!=null){
             yellowNote.Update();
-            if(yellowNote.noteY>yellowNote.ScreenHeight){
+            if(yellowNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
         else if(blueNote!=null){
             blueNote.Update();
-            if(blueNote.noteY>blueNote.ScreenHeight){
+            if(blueNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
         else if(orangeNote !=null){
             orangeNote.Update();
-            if(orangeNote.noteY>orangeNote.ScreenHeight){
+            if(orangeNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
