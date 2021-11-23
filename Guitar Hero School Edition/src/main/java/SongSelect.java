@@ -11,7 +11,7 @@ public class SongSelect extends MenuScreen {
     public SongSelect() {
 
         super();
-        buttons.add(new Button("Iron Maiden - Trooper", screenWidth / 2, screenHeight / 2, 20));
+        buttons.add(new Button("Foghat - Slow Ride", screenWidth / 2, screenHeight / 2, 20));
         buttons.add(new Button("BACK", screenWidth / 2, screenHeight / 2 + 70, 20));
         try {
             image = ImageIO.read(new File("src/main/resources/songSelect.jpg"));
@@ -26,8 +26,8 @@ public class SongSelect extends MenuScreen {
             Game.songSelectIsActive = false;
             Game.mainMenuIsActive = true;
         }
-        if (buttons.get(activeButtonIndex).btntxt.equals("Iron Maiden - Trooper")) {
-            PlayScreen.loadSong("src/main/resources/Iron Maiden - Trooper.txt");
+        if (buttons.get(activeButtonIndex).btntxt.equals("Foghat - Slow Ride")) {
+            PlayScreen.loadSong("src/main/resources/Foghat - Slow Ride.txt");
             Game.playIsActive = true;
             Game.songSelectIsActive = false;
         }
