@@ -42,25 +42,25 @@ public class NoteSet {
                 NoteIsActive = false;
             }
         }
-        else if(redNote!=null){
+        if(redNote!=null){
             redNote.Update();
             if(redNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
-        else if(yellowNote!=null){
+        if(yellowNote!=null){
             yellowNote.Update();
             if(yellowNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
-        else if(blueNote!=null){
+        if(blueNote!=null){
             blueNote.Update();
             if(blueNote.noteY>yValueToRemove){
                 NoteIsActive = false;
             }
         }
-        else if(orangeNote !=null){
+        if(orangeNote !=null){
             orangeNote.Update();
             if(orangeNote.noteY>yValueToRemove){
                 NoteIsActive = false;

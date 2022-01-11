@@ -3,7 +3,7 @@
  */
 public class Line {
     enum NoteType {
-        none, regular, star, regularExtended, starExtended, white, whiteExtended, whiteStarExtended, BAD
+        none, regular, star, regularExtended, starExtended, white, whiteExtended, whiteStarExtended,whiteStar, BAD
     }
     int delay;
     NoteType Green;

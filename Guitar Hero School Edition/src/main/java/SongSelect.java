@@ -27,7 +27,7 @@ public class SongSelect extends MenuScreen {
             Game.mainMenuIsActive = true;
         }
         if (buttons.get(activeButtonIndex).btntxt.equals("Foghat - Slow Ride")) {
-            PlayScreen.loadSong("src/main/resources/Foghat - Slow Ride.txt");
+            songStitch.loadSong("src/main/resources/Foghat - Slow Ride");
             Game.playIsActive = true;
             Game.songSelectIsActive = false;
         }

@@ -33,12 +33,15 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
     }
 
     public Game(){
+        // region screen creation
         mainMenu = new MainMenu();
         songSelect = new SongSelect();
         playScreen = new PlayScreen();
         credits = new Credits();
+        //endregion
+        Timer timer = new Timer(17, this);//setup framerate
+       //region window setup
         JFrame jframe = new JFrame();
-        Timer timer = new Timer(17, this);
         renderer = new Renderer();
         renderer.setBackground(Color.BLACK);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -48,11 +51,14 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setSize(width, height);
         jframe.setResizable(false);
+        //region mouse and key listener
         jframe.addKeyListener(this);
         jframe.addMouseListener(this);
+        //endregion
         jframe.setVisible(true);
+        //endregion
         manager = new SDL2ControllerManager();
-
+       //region controller setup
         manager.addListenerAndRunForConnectedControllers(new ControllerListener() {
             @Override
             public void connected(Controller controller) {
@@ -107,6 +113,7 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
                 return false;
             }
         });
+        //endregion
         timer.start();
     }
     private void writeToFile(String fileName, String text){
@@ -128,30 +135,17 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         }
     }
 
+    // action performed = called once per frame
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
             manager.pollState();
-//                if(recent!=null){
-//                    System.out.println(recent.getButton(0));
-//                }
 
         } catch (SDL_Error sdl_error) {
             sdl_error.printStackTrace();
         }
-        //region get controller info
-     /*   ControllerState currState = controllers.getState(0);
-        if(!currState.isConnected) {
-            System.out.println("no controller connected");
-        } else if (currState.dpadUp) {
-            mainMenu.changeSelected(true);
-        }
-        else if (currState.dpadDown) {
-            mainMenu.changeSelected(false);
-        }*/
-        //endregion
-       // System.out.println("update");
 
+       //region updating current screen
         if (mainMenuIsActive){
             mainMenu.update();
         }else if(songSelectIsActive){
@@ -161,12 +155,13 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         }else if(creditsIsActive){
             credits.update();
         }
-        renderer.repaint();
+        //endregion
+        renderer.repaint();// calls repaint
 
     }
 
     public void repaint(Graphics g) {
-        // System.out.println("draw");
+        //region draw current screen
         if (mainMenuIsActive) {
             mainMenu.draw(g);
         } else if (songSelectIsActive) {
@@ -176,14 +171,9 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         } else if (creditsIsActive) {
             credits.draw(g);
         }
+        //endregion
     }
-
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
+     //region used events
     @Override
     public void keyPressed(KeyEvent e) {
 
@@ -193,7 +183,12 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
     public void keyReleased(KeyEvent e) {
         handleButtonRelease(getButtonCode(e));
     }
+    //endregion
+    // region unused events
+    @Override
+    public void keyTyped(KeyEvent e) {
 
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -219,7 +214,9 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-    //mapping of buttons
+    //endregion
+
+    //region mapping of controller buttons
  public ButtonCode getButtonCode(int buttonCode){
         if(buttonCode == 0){
             return ButtonCode.GREEN;
@@ -246,6 +243,8 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         }
     return ButtonCode.BAD;
 }
+//endregion
+    //region mapping of keyboard keys
      public ButtonCode getButtonCode(KeyEvent e){
         if(e.getKeyCode() == KeyEvent.VK_1){
             return ButtonCode.GREEN;
@@ -270,35 +269,42 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         }
         return ButtonCode.BAD;
     }
-     public void handleButton(ButtonCode buttonCode){
-        if (mainMenuIsActive){
+    //endregion
 
-            if (buttonCode == ButtonCode.STRUM_UP)  {
-                mainMenu.changeSelected(true);
-            } else  if (buttonCode == ButtonCode.STRUM_DOWN ) {
-                mainMenu.changeSelected(false);
-            } else if (buttonCode == ButtonCode.GREEN){
-                mainMenu.Select();
-            }
-        }else if(songSelectIsActive){
-            if (buttonCode == ButtonCode.STRUM_UP)  {
-                songSelect.changeSelected(true);
-            } else  if (buttonCode == ButtonCode.STRUM_DOWN ) {
-                songSelect.changeSelected(false);
-            } else if (buttonCode == ButtonCode.GREEN){
-                songSelect.Select();
-            }
-        }else if(playIsActive){
-            if (buttonCode == ButtonCode.GREEN||buttonCode == ButtonCode.RED||buttonCode == ButtonCode.YELLOW||buttonCode == ButtonCode.BLUE||buttonCode == ButtonCode.ORANGE||buttonCode == ButtonCode.STRUM_UP||buttonCode == ButtonCode.STRUM_DOWN){
-                playScreen.ButtonPressed(buttonCode);
-            }
-        }else if(creditsIsActive) {
-            if (buttonCode == ButtonCode.GREEN) {
-                credits.Select();
-            }
-        }
+    //region do things on button press
+     public void handleButton(ButtonCode buttonCode) {
+         //region main menu
+         if (mainMenuIsActive) {
 
-    }
+             if (buttonCode == ButtonCode.STRUM_UP) {
+                 mainMenu.changeSelected(true);
+             } else if (buttonCode == ButtonCode.STRUM_DOWN) {
+                 mainMenu.changeSelected(false);
+             } else if (buttonCode == ButtonCode.GREEN) {
+                 mainMenu.Select();
+             }
+         }
+         //endregion
+         else if (songSelectIsActive) {
+             if (buttonCode == ButtonCode.STRUM_UP) {
+                 songSelect.changeSelected(true);
+             } else if (buttonCode == ButtonCode.STRUM_DOWN) {
+                 songSelect.changeSelected(false);
+             } else if (buttonCode == ButtonCode.GREEN) {
+                 songSelect.Select();
+             }
+         } else if (playIsActive) {
+             if (buttonCode == ButtonCode.GREEN || buttonCode == ButtonCode.RED || buttonCode == ButtonCode.YELLOW || buttonCode == ButtonCode.BLUE || buttonCode == ButtonCode.ORANGE || buttonCode == ButtonCode.STRUM_UP || buttonCode == ButtonCode.STRUM_DOWN) {
+                 playScreen.ButtonPressed(buttonCode);
+             }
+         } else if (creditsIsActive) {
+             if (buttonCode == ButtonCode.GREEN) {
+                 credits.Select();
+             }
+         }
+
+     }
+     //endregion
     public void handleButtonRelease(ButtonCode buttonCode){
         if(playIsActive){
             if (buttonCode == ButtonCode.GREEN||buttonCode == ButtonCode.RED||buttonCode == ButtonCode.YELLOW||buttonCode == ButtonCode.BLUE||buttonCode == ButtonCode.ORANGE){
