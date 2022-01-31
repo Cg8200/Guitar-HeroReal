@@ -10,6 +10,7 @@ public class PlayScreen {
     int frameCount = 0;
     static LinkedList<Line> linesList = new LinkedList<>();
     static LinkedList<NoteSet> NoteSetList = new LinkedList<>();
+    static LinkedList<NoteSet> LongNoteSet = new LinkedList<>();
     Image GreenFret;
     Image RedFret;
     Image YellowFret;
@@ -94,9 +95,13 @@ public class PlayScreen {
         g.drawImage(YellowFret.image, YellowFret.x, YellowFret.y, YellowFret.Width, YellowFret.Height, null);
         g.drawImage(BlueFret.image, BlueFret.x, BlueFret.y, BlueFret.Width, BlueFret.Height, null);
         g.drawImage(OrangeFret.image, OrangeFret.x, OrangeFret.y, OrangeFret.Width, OrangeFret.Height, null);
+        for (int i = 0; i < LongNoteSet.size(); i++) {
+            LongNoteSet.get(i).Draw(g);
+        }
         for (int i = 0; i < NoteSetList.size(); i++) {
             NoteSetList.get(i).Draw(g);
         }
+
         GreenFire.Draw(g);
         RedFire.Draw(g);
         YellowFire.Draw(g);
@@ -142,6 +147,32 @@ public class PlayScreen {
             frameCount = 0;
             if (linesList.size() > 0) {
                 currentLine = linesList.remove();
+                if(currentLine.greenLength != 0 || currentLine.redlength != 0 || currentLine.yellowLength != 0 || currentLine.blueLength != 0 || currentLine.orangeLength != 0){
+                    totalNSsinceNote = totalNSsinceNote - currentLine.delay;
+                    // System.out.println(currentLine.Green + ", " + currentLine.Red + ", " + currentLine.Yellow + ", " + currentLine.Blue + ", " + currentLine.Orange + ", ");
+                     greenNote = null;
+                     redNote = null;
+                     yellowNote = null;
+                     blueNote = null;
+                     orangeNote = null;
+                    if (currentLine.Green != Line.NoteType.none) {
+                        greenNote = new Note(currentLine.Green, Note.NoteColor.Green,currentLine.greenLength);
+                    }
+                    if (currentLine.Red != Line.NoteType.none) {
+                        redNote = new Note(currentLine.Red, Note.NoteColor.Red,currentLine.redlength);
+                    }
+                    if (currentLine.Yellow != Line.NoteType.none) {
+                        yellowNote = new Note(currentLine.Yellow, Note.NoteColor.Yellow,currentLine.yellowLength);
+                    }
+                    if (currentLine.Blue != Line.NoteType.none) {
+                        blueNote = new Note(currentLine.Blue, Note.NoteColor.Blue,currentLine.blueLength);
+                    }
+                    if (currentLine.Orange != Line.NoteType.none) {
+                        orangeNote = new Note(currentLine.Orange, Note.NoteColor.Orange,currentLine.orangeLength);
+                    }
+                    LongNoteSet.add(new NoteSet(greenNote, redNote, yellowNote, blueNote, orangeNote));
+                    currentLine = linesList.remove();
+                }
             } else {
                 NoteSetList.remove(0);
                 GreenFret = GreenFretIdle;
@@ -164,7 +195,18 @@ public class PlayScreen {
                 i--;
             }
         }
-
+        for (int i = 0; i < LongNoteSet.size(); i++) {
+            LongNoteSet.get(i).Update(HitBox.y + HitBox.Height);
+        }
+        for (int i = 0; i < LongNoteSet.size(); i++) {
+            if (!LongNoteSet.get(i).NoteIsActive) {
+                LongNoteSet.remove(i);
+                i--;
+            }
+        }
+        if(GreenFret == GreenFretPlayed && LongNoteSet.getFirst().greenNote.noteLength != 0){
+            
+        }
 
     }
 
@@ -270,7 +312,6 @@ public class PlayScreen {
 
     }
     public  void NoteMissed(){
-        System.out.println("AWWW MAAAAN");
         noteStreak = 0;
         lastNoteSetPlayed = new NoteSet(null, null,null,null,null);
     }
