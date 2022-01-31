@@ -1,11 +1,4 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -87,16 +80,16 @@ public class songStitch {
                 }
                 int numbTicks = currentNote.tickNumber - previousTick;
                 //frames = (#ticks * 60 * 17) / (resolution * BPM)
-                int frames = getNumFrames(resolution, BPM, numbTicks);
+                double ns = getNumNS(resolution, BPM, numbTicks);
                 if(previousTick == 0){
-                    frames = frames - 81;
-                    if(frames < 0){
-                        frames = 0;
+                    ns = ns - (81*17000000.0) ;
+                    if(ns < 0){
+                        ns = 0;
                     }
                 }
                 boolean isWhite = numbTicks <= resolution / 4;
                 boolean isStar = false;//fixme
-                boolean isExtended = false;//fixme
+                boolean isExtended = currentNote.Length > 0 && currentNote.NoteType.equals("N");
                 int[] currentNotes = new int[]{0, 0, 0, 0, 0};
                 for (int i = 0; i < currentChartNoteSet.size(); i++) {
 
@@ -131,13 +124,56 @@ public class songStitch {
                         && previousNotes[4] == currentNotes[4]) {
 
                 }
-                Line.NoteType Green = makeType(currentNotes[0], isWhite, isStar, isExtended);
-                Line.NoteType Red = makeType(currentNotes[1], isWhite, isStar, isExtended);
-                Line.NoteType Yellow = makeType(currentNotes[2], isWhite, isStar, isExtended);
-                Line.NoteType Blue = makeType(currentNotes[3], isWhite, isStar, isExtended);
-                Line.NoteType Orange = makeType(currentNotes[4], isWhite, isStar, isExtended);
-                PlayScreen.linesList.add(new Line(frames, Green, Red, Yellow, Blue, Orange));
+                Line.NoteType Green = makeType(currentNotes[0], isWhite, isStar, false);
+                Line.NoteType Red = makeType(currentNotes[1], isWhite, isStar, false);
+                Line.NoteType Yellow = makeType(currentNotes[2], isWhite, isStar, false);
+                Line.NoteType Blue = makeType(currentNotes[3], isWhite, isStar, false);
+                Line.NoteType Orange = makeType(currentNotes[4], isWhite, isStar, false);
+                PlayScreen.linesList.add(new Line(ns, Green, Red, Yellow, Blue, Orange,0,0,0,0,0));
+                if(isExtended){
+                    currentNotes = new int[]{0, 0, 0, 0, 0};
+                    double[] currentLengths = new double[]{0, 0, 0, 0, 0};
+                    for (int i = 0; i < currentChartNoteSet.size(); i++) {
 
+                        //region separates note types by number
+                        if (currentChartNoteSet.get(i).noteNumber == 0) {
+                            currentNotes[0] = 1;
+                            currentLengths[0] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
+                        }
+                        if (currentChartNoteSet.get(i).noteNumber == 1) {
+                            currentNotes[1] = 1;
+                            currentLengths[1] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
+                        }
+                        if (currentChartNoteSet.get(i).noteNumber == 2) {
+                            currentNotes[2] = 1;
+                            currentLengths[2] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
+                        }
+                        if (currentChartNoteSet.get(i).noteNumber == 3) {
+                            currentNotes[3] = 1;
+                            currentLengths[3] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
+                        }
+                        if (currentChartNoteSet.get(i).noteNumber == 4) {
+                            currentNotes[4] = 1;
+                            currentLengths[4] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
+                        }
+                    }
+                     Green = makeType(currentNotes[0], isWhite, isStar, isExtended);
+                     Red = makeType(currentNotes[1], isWhite, isStar, isExtended);
+                     Yellow = makeType(currentNotes[2], isWhite, isStar, isExtended);
+                     Blue = makeType(currentNotes[3], isWhite, isStar, isExtended);
+                    Orange = makeType(currentNotes[4], isWhite, isStar, isExtended);
+                    PlayScreen.linesList.add(new Line(1, Green, Red, Yellow, Blue, Orange,currentLengths[0],currentLengths[1],currentLengths[2],currentLengths[3],currentLengths[4]));
+                }
+
+             /*   long realFrames = frames;
+                if(previousTick == 0){
+                    realFrames = frames + 81;
+                }
+                double ticks = realFrames/(60.0*1000.0*1000.0)*(resolution*BPM*17.0);
+
+
+                writeToFile(  ticks+ ": "+numbTicks+ ", "+frames +": "+realFrames + ", "+ Green  + ", "+ Red  + ", "+ Yellow + ", "+ Blue + ", "+ Orange + "\n");
+*/
                 //5 = forced note for that tick
                 previousNotes[0] = currentNotes[0];
                 previousNotes[1] = currentNotes[1];
@@ -166,14 +202,26 @@ public class songStitch {
         }catch (IOException e) {
             System.out.println(e);
         }
+        PlayScreen.linesList.add(new Line(5*1000000000.0,
+                makeType(0, false, false, false),
+                makeType(0, false, false, false),
+                makeType(0, false, false, false),
+                makeType(0, false, false, false),
+                makeType(0, false, false, false),0,0,0,0,0));
 
         if (PlayScreen.linesList.size() > 0) {
             PlayScreen.currentLine = PlayScreen.linesList.remove();
         }
-
-        String filename = "example.mp3";
-        MP3Player mp3Player = new MP3Player(filename);
+        File myObj = new File("noteDelays.txt");
+        if (myObj.delete()) {
+            System.out.println("Deleted the file: " + myObj.getName());
+        } else {
+            System.out.println("Failed to delete the file.");
+        }
+        String filename = "src/main/resources/Foghat - Slow Ride.mp3";
+        MP3player mp3Player = new MP3player(filename);//Fixme
         mp3Player.play();
+        Game.LastFrameTimeNS = System.nanoTime();
 
     }
     //region defines white star and extended
@@ -200,9 +248,33 @@ public class songStitch {
             return Line.NoteType.BAD;
         }
     }//endregion
-
-    //region gets number of frames
-    static int getNumFrames(double resolution, double bpm, double ticks){
-        return (int) ((ticks*60.0*1000.0*1000.0)/(resolution*bpm*17.0));
+    static double remainder = 0;
+    //region gets number of NS
+    static double getNumNS(double resolution, double bpm, double ticks){
+        double total = ((ticks*60.0*1000.0*1000.0)/(resolution*bpm))*1000000;
+      /*  int frames = (int) (total + remainder);
+        remainder = total +remainder - frames;
+        if(remainder < 0 ){
+            System.out.println("woop");
+        }*/
+        return total;
+    }
+    static void writeToFile(String line){
+        File f = new File("highScore.txt");
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(f,true);
+        } catch (IOException e) {
+            System.out.println("File not found  =(");
+        }
+        try{
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(new String(line));
+            bw.flush();
+            bw.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
     }
 }//endregion

@@ -31,5 +31,6 @@ public class SongSelect extends MenuScreen {
             Game.playIsActive = true;
             Game.songSelectIsActive = false;
         }
+
     }
 }

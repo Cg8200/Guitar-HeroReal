@@ -12,9 +12,9 @@ public class Image {
     int y;
     int Height;
     int Width;
-    boolean isPressed;
+    boolean isFire;
 
-    public Image(String pathName,int x, int y, int width, int height,boolean isPressed) {
+    public Image(String pathName,int x, int y, int width, int height,boolean isFire) {
         try {
             image = ImageIO.read(new File(pathName));
 
@@ -25,6 +25,6 @@ public class Image {
         this.y = y;
         Height = height;
         Width = width;
-        this.isPressed = isPressed;
+        this.isFire = isFire;
     }
 }

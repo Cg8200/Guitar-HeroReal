@@ -11,16 +11,16 @@ public class Fire extends Image {
 
     public void DisplayFire(){
         Timer = 10;
-        isPressed = true;
+        isFire = true;
     }
     public void Draw(Graphics g){
         Timer = Timer-1;
         if (Timer<0){
             Timer = 0;
-            isPressed = false;
+            isFire = false;
         }
-        if(isPressed){
-         //   g.drawImage(image, x, y, Width, Height, null);
+        if(isFire){
+            g.drawImage(image, x, y, Width, Height, null);
         }
     }
 }

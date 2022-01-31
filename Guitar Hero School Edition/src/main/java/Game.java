@@ -25,6 +25,7 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
     SongSelect songSelect;
     PlayScreen playScreen;
     Credits credits;
+    static long LastFrameTimeNS = 0;
 
     private  Controller recent;
      SDL2ControllerManager manager;
@@ -297,6 +298,7 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
              if (buttonCode == ButtonCode.GREEN || buttonCode == ButtonCode.RED || buttonCode == ButtonCode.YELLOW || buttonCode == ButtonCode.BLUE || buttonCode == ButtonCode.ORANGE || buttonCode == ButtonCode.STRUM_UP || buttonCode == ButtonCode.STRUM_DOWN) {
                  playScreen.ButtonPressed(buttonCode);
              }
+
          } else if (creditsIsActive) {
              if (buttonCode == ButtonCode.GREEN) {
                  credits.Select();
@@ -310,6 +312,7 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
             if (buttonCode == ButtonCode.GREEN||buttonCode == ButtonCode.RED||buttonCode == ButtonCode.YELLOW||buttonCode == ButtonCode.BLUE||buttonCode == ButtonCode.ORANGE){
                 playScreen.FretReleased(buttonCode);
             }
+
         }
     }
     public static void main(String[] args) {

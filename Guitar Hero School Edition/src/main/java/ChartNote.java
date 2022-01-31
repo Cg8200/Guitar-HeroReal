@@ -5,12 +5,12 @@ public class ChartNote {
    int tickNumber;
    int noteNumber;
    String NoteType;
-   int starDelay;
+   int Length;
 
-    public ChartNote(int tickNumber, int noteNumber, String noteType, int starDelay) {
+    public ChartNote(int tickNumber, int noteNumber, String noteType, int Length) {
         this.tickNumber = tickNumber;
         this.noteNumber = noteNumber;
         NoteType = noteType;
-        this.starDelay = starDelay;
+        this.Length = Length;
     }
 }
