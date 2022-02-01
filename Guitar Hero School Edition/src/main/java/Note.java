@@ -11,7 +11,9 @@ public class Note {
     int Width;
     int Height;
     int Speed;
+    double noteLength;
     Line.NoteType noteType;
+    boolean longMissed = false;
 
     NoteColor noteColor;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -20,6 +22,7 @@ public class Note {
         Green, Red, Yellow, Blue, Orange
     }
     public Note(Line.NoteType noteType,NoteColor noteColor, double length){
+        this.noteLength = length;
         this.noteColor=noteColor;
         this.noteType = noteType;
         if(noteColor == NoteColor.Green){
@@ -102,7 +105,14 @@ public class Note {
     public void Draw(Graphics g){
         g.drawImage(image, noteX, (int)noteY,Width,Height, null);
     }
-
+    public void noteMissed(){
+        longMissed = true;
+        try {
+            image = ImageIO.read(new File("src/main/resources/greyExtended.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public boolean isOnFret(int Y1,int Y2){
       if(noteY>=Y1&&noteY<=Y2){
           return true;

@@ -58,6 +58,7 @@ public class songStitch {
                 }//endregion
 
             }
+            //expected: notelist, TSlist, BPMlist,resolution set
             BPM = BPMlist.get(0).value;//fixme-add extended delays & stars
             BPMlist.remove(0);
             int previousTick = 0;
@@ -68,20 +69,22 @@ public class songStitch {
                 int previousStarTick = -1;
                 LinkedList<ChartNote> currentChartNoteSet = new LinkedList<>();
                 currentChartNoteSet.add(NotesList.remove(0));
+                //currentChartNoteSet has a value
                 //if(NotesList.size() > 0) {
                     while (NotesList.size() > 0 && NotesList.get(0).tickNumber == currentChartNoteSet.get(0).tickNumber) {
                         currentChartNoteSet.add(NotesList.remove(0));
                     }
                // }
+                //expect: currentChartNoteSet has all notes played at one time and should not be empty
                 ChartNote currentNote = currentChartNoteSet.get(0);
-                if(currentNote.tickNumber >=BPMlist.get(0).tick){
+                    //make sure bpm values are correct
+                if(BPMlist.size() > 0 && currentNote.tickNumber >=BPMlist.get(0).tick){
                     BPM = BPMlist.get(0).value;
                     BPMlist.remove(0);
                 }
-                int numbTicks = currentNote.tickNumber - previousTick;
-                //frames = (#ticks * 60 * 17) / (resolution * BPM)
-                double ns = getNumNS(resolution, BPM, numbTicks);
-                if(previousTick == 0){
+                int numbTicks = currentNote.tickNumber - previousTick;//numticks set to numtics between notes
+                double ns = getNumNS(resolution, BPM, numbTicks);//convert to nanoseconds
+                if(previousTick == 0){//adjustment for first note
                     ns = ns - (81*17000000.0) ;
                     if(ns < 0){
                         ns = 0;
@@ -115,13 +118,6 @@ public class songStitch {
                     if (currentChartNoteSet.get(i).noteNumber == 6) {
                         //open purple note stuff
                     }//endregion
-
-                }
-                if (previousNotes[0] == currentNotes[0]
-                        && previousNotes[1] == currentNotes[1]
-                        && previousNotes[2] == currentNotes[2]
-                        && previousNotes[3] == currentNotes[3]
-                        && previousNotes[4] == currentNotes[4]) {
 
                 }
                 Line.NoteType Green = makeType(currentNotes[0], isWhite, isStar, false);
@@ -218,7 +214,7 @@ public class songStitch {
         } else {
             System.out.println("Failed to delete the file.");
         }
-        String filename = "src/main/resources/Foghat - Slow Ride.mp3";
+        String filename = pathname+".mp3";
         MP3player mp3Player = new MP3player(filename);//Fixme
         mp3Player.play();
         Game.LastFrameTimeNS = System.nanoTime();

@@ -204,9 +204,45 @@ public class PlayScreen {
                 i--;
             }
         }
-        if(GreenFret == GreenFretPlayed && LongNoteSet.getFirst().greenNote.noteLength != 0){
-            
-        }
+        //longnote ifmissed stuff
+    /*    if(LongNoteSet.size()>0 && aNoteOnFret(LongNoteSet)) {
+            if (LongNoteSet.getFirst().greenNote != null) {
+                if ( GreenFret == GreenFretPlayed) {
+
+                } else {
+                    LongNoteSet.getFirst().greenNote.noteMissed();
+                }
+            }
+            if (LongNoteSet.getFirst().redNote != null) {
+                if ( RedFret == RedFretPlayed) {
+
+                } else {
+                    LongNoteSet.getFirst().redNote.noteMissed();
+                }
+            }
+            if ( LongNoteSet.getFirst().yellowNote != null) {
+                if (YellowFret == YellowFretPlayed) {
+
+                } else {
+                    LongNoteSet.getFirst().yellowNote.noteMissed();
+                }
+            }
+            if (LongNoteSet.getFirst().blueNote != null) {
+                if ( BlueFret == BlueFretPlayed) {
+
+                } else {
+                    LongNoteSet.getFirst().blueNote.noteMissed();
+                }
+            }
+            if ( LongNoteSet.getFirst().orangeNote != null) {
+                if (OrangeFret == OrangeFretPlayed) {
+
+                } else {
+                    LongNoteSet.getFirst().orangeNote.noteMissed();
+                }
+            }
+        }*/
+
 
     }
 
@@ -230,7 +266,7 @@ public class PlayScreen {
         if(NoteSetList.size()>0) {
             if ((Game.ButtonCode.STRUM_UP == buttonCode || Game.ButtonCode.STRUM_DOWN == buttonCode)) {
                 try {
-                    if (aNoteOnFret()) {
+                    if (aNoteOnFret(NoteSetList)) {
                         if (CorrectFrets(false)) {
 
                             System.out.println(noteStreak);
@@ -262,7 +298,7 @@ public class PlayScreen {
             }
             //region tap notes
             else if (noteStreak >= 1) {
-                if (aNoteOnFret()) {
+                if (aNoteOnFret(NoteSetList)) {
                     if (CorrectFrets(true)) {
                         boolean isWhite = false;
                         if ((GreenFret==GreenFretPlayed)) {
@@ -337,7 +373,7 @@ public class PlayScreen {
         }
         return false;
     }//endregion
-    public boolean aNoteOnFret(){
+    public boolean aNoteOnFret(LinkedList<NoteSet> NoteSetList){
        return  (NoteSetList.get(0).greenNote != null && NoteSetList.get(0).greenNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height))
                 || (NoteSetList.get(0).redNote != null && NoteSetList.get(0).redNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height))
                 || (NoteSetList.get(0).yellowNote != null && NoteSetList.get(0).yellowNote.isOnFret(HitBox.y, HitBox.y + HitBox.Height))

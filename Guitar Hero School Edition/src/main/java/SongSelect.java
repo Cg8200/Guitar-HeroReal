@@ -12,7 +12,8 @@ public class SongSelect extends MenuScreen {
 
         super();
         buttons.add(new Button("Foghat - Slow Ride", screenWidth / 2, screenHeight / 2, 20));
-        buttons.add(new Button("BACK", screenWidth / 2, screenHeight / 2 + 70, 20));
+        buttons.add(new Button("DA-games - build our machine", screenWidth / 2, screenHeight / 2 + 30, 20));
+        buttons.add(new Button("BACK", screenWidth / 2, screenHeight / 2 + 100, 20));
         try {
             image = ImageIO.read(new File("src/main/resources/songSelect.jpg"));
         } catch (IOException e) {
@@ -31,6 +32,12 @@ public class SongSelect extends MenuScreen {
             Game.playIsActive = true;
             Game.songSelectIsActive = false;
         }
+        if (buttons.get(activeButtonIndex).btntxt.equals("DA-games - build our machine")) {
+            songStitch.loadSong("src/main/resources/DAgames - build our machine");
+            Game.playIsActive = true;
+            Game.songSelectIsActive = false;
+        }
+       
 
     }
 }
