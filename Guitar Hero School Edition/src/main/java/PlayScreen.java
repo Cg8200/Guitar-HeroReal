@@ -40,6 +40,11 @@ public class PlayScreen {
     Image BlueNoteGlow;
     Image OrangeNoteGlow;
     NoteSet lastNoteSetPlayed;
+    boolean drawGreen = false;
+    boolean drawRed= false;
+    boolean drawYellow= false;
+    boolean drawBlue= false;
+    boolean drawOrange= false;
     static MP3player mp3Player;
     //Chart file stuff
     static int resolution = 192;
@@ -101,6 +106,13 @@ public class PlayScreen {
         for (int i = 0; i < NoteSetList.size(); i++) {
             NoteSetList.get(i).Draw(g);
         }
+        if(drawGreen){
+
+        }
+        if(drawRed){
+            
+        }
+
 
         GreenFire.Draw(g);
         RedFire.Draw(g);
@@ -109,10 +121,17 @@ public class PlayScreen {
         OrangeFire.Draw(g);
 
 
+
+
     } //endregion
 
 
     public void update() {
+        drawGreen = false;
+        drawRed = false;
+        drawYellow = false;
+        drawBlue = false;
+        drawOrange = false;
         long frameTimeNS = System.nanoTime();
         framelengthNS = frameTimeNS - Game.LastFrameTimeNS;
         Game.LastFrameTimeNS = frameTimeNS;
@@ -204,47 +223,55 @@ public class PlayScreen {
                 i--;
             }
         }
+
+
+
+
         //longnote ifmissed stuff
-    /*    if(LongNoteSet.size()>0 && aNoteOnFret(LongNoteSet)) {
+         if(LongNoteSet.size()>0 && aNoteOnFret(LongNoteSet)) {
             if (LongNoteSet.getFirst().greenNote != null) {
                 if ( GreenFret == GreenFretPlayed) {
-
+                    drawGreen = true;
                 } else {
                     LongNoteSet.getFirst().greenNote.noteMissed();
                 }
             }
             if (LongNoteSet.getFirst().redNote != null) {
                 if ( RedFret == RedFretPlayed) {
-
+                    drawRed = true;
                 } else {
                     LongNoteSet.getFirst().redNote.noteMissed();
                 }
             }
             if ( LongNoteSet.getFirst().yellowNote != null) {
                 if (YellowFret == YellowFretPlayed) {
-
+                    drawYellow = true;
                 } else {
                     LongNoteSet.getFirst().yellowNote.noteMissed();
                 }
             }
             if (LongNoteSet.getFirst().blueNote != null) {
                 if ( BlueFret == BlueFretPlayed) {
-
+                    drawBlue = true;
                 } else {
                     LongNoteSet.getFirst().blueNote.noteMissed();
                 }
             }
             if ( LongNoteSet.getFirst().orangeNote != null) {
                 if (OrangeFret == OrangeFretPlayed) {
-
+                    drawOrange = true;
                 } else {
                     LongNoteSet.getFirst().orangeNote.noteMissed();
                 }
             }
-        }*/
+        }
 
 
     }
+
+
+
+
 
     public void ButtonPressed(Game.ButtonCode buttonCode) {
         if (buttonCode == Game.ButtonCode.GREEN) {
@@ -398,12 +425,10 @@ public class PlayScreen {
         if (buttonCode == Game.ButtonCode.ORANGE) {
             OrangeFret = OrangeFretIdle;
         }
-
-
-
-
-
     }
+
+
+
     static void writeToFile(Long line){
         File f = new File("noteDelays.txt");
         FileWriter fw = null;
