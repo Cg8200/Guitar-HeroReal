@@ -124,7 +124,10 @@ public class Note {
             return true;
         } else if (noteY + Height >= Y1 - 5 && noteY + Height <= Y2 + 5) {
             return true;
-        } else {
+        }else if(noteY <= Y1 + 5 && noteY + Height >= Y2 - 5){
+            return true;
+        }
+        else {
             return false;
         }
 

@@ -39,6 +39,12 @@ public class PlayScreen {
     Image YellowNoteGlow;
     Image BlueNoteGlow;
     Image OrangeNoteGlow;
+
+    Image GreenNoteSpark;
+    Image RedNoteSpark;
+    Image YellowNoteSpark;
+    Image BlueNoteSpark;
+    Image OrangeNoteSpark;
     NoteSet lastNoteSetPlayed;
     boolean drawGreen = false;
     boolean drawRed= false;
@@ -87,6 +93,11 @@ public class PlayScreen {
         BlueNoteGlow = new Image("src/main/resources/BlueNoteGlow.png",1010, 880, 80, 80,false);
         OrangeNoteGlow = new Image("src/main/resources/OrangeNoteGlow.png",1110, 880, 80, 80,false);
 
+        GreenNoteSpark = new Image("src/main/resources/sparks.png",710, 880, 80, 80,false);
+        RedNoteSpark = new Image("src/main/resources/sparks.png",810, 880, 80, 80,false);
+        YellowNoteSpark = new Image("src/main/resources/sparks.png",910, 880, 80, 80,false );
+        BlueNoteSpark = new Image("src/main/resources/sparks.png",1010, 880, 80, 80,false);
+        OrangeNoteSpark = new Image("src/main/resources/sparks.png",1110, 880, 80, 80,false);
     }//endregion
 
 
@@ -106,11 +117,21 @@ public class PlayScreen {
         for (int i = 0; i < NoteSetList.size(); i++) {
             NoteSetList.get(i).Draw(g);
         }
-        if(drawGreen){
 
+        if(drawGreen){
+            g.drawImage(GreenNoteSpark.image,GreenNoteSpark.x, GreenNoteSpark.y, GreenNoteSpark.Width, GreenNoteSpark.Height, null);
         }
         if(drawRed){
-            
+            g.drawImage(RedNoteSpark.image,RedNoteSpark.x, RedNoteSpark.y, RedNoteSpark.Width, RedNoteSpark.Height, null);
+        }
+        if(drawYellow){
+            g.drawImage(YellowNoteSpark.image,YellowNoteSpark.x, YellowNoteSpark.y, YellowNoteSpark.Width, YellowNoteSpark.Height, null);
+        }
+        if(drawBlue){
+            g.drawImage(BlueNoteSpark.image,BlueNoteSpark.x,BlueNoteSpark.y, BlueNoteSpark.Width,BlueNoteSpark.Height, null);
+        }
+        if(drawOrange){
+            g.drawImage(OrangeNoteSpark.image,OrangeNoteSpark.x, OrangeNoteSpark.y, OrangeNoteSpark.Width, OrangeNoteSpark.Height, null);
         }
 
 
@@ -229,41 +250,44 @@ public class PlayScreen {
 
         //longnote ifmissed stuff
          if(LongNoteSet.size()>0 && aNoteOnFret(LongNoteSet)) {
-            if (LongNoteSet.getFirst().greenNote != null) {
+            if (LongNoteSet.getFirst().greenNote != null && LongNoteSet.getFirst().greenNote.longMissed==false) {
                 if ( GreenFret == GreenFretPlayed) {
                     drawGreen = true;
                 } else {
                     LongNoteSet.getFirst().greenNote.noteMissed();
                 }
             }
-            if (LongNoteSet.getFirst().redNote != null) {
+            if (LongNoteSet.getFirst().redNote != null && LongNoteSet.getFirst().redNote.longMissed==false) {
                 if ( RedFret == RedFretPlayed) {
                     drawRed = true;
                 } else {
                     LongNoteSet.getFirst().redNote.noteMissed();
                 }
             }
-            if ( LongNoteSet.getFirst().yellowNote != null) {
+            if ( LongNoteSet.getFirst().yellowNote != null && LongNoteSet.getFirst().yellowNote.longMissed==false) {
                 if (YellowFret == YellowFretPlayed) {
                     drawYellow = true;
                 } else {
                     LongNoteSet.getFirst().yellowNote.noteMissed();
                 }
             }
-            if (LongNoteSet.getFirst().blueNote != null) {
+            if (LongNoteSet.getFirst().blueNote != null && LongNoteSet.getFirst().blueNote.longMissed==false) {
                 if ( BlueFret == BlueFretPlayed) {
                     drawBlue = true;
                 } else {
                     LongNoteSet.getFirst().blueNote.noteMissed();
                 }
             }
-            if ( LongNoteSet.getFirst().orangeNote != null) {
+            if ( LongNoteSet.getFirst().orangeNote != null && LongNoteSet.getFirst().orangeNote.longMissed==false) {
                 if (OrangeFret == OrangeFretPlayed) {
                     drawOrange = true;
                 } else {
                     LongNoteSet.getFirst().orangeNote.noteMissed();
                 }
             }
+        }
+        if(LongNoteSet.size()>0 && !LongNoteSet.getFirst().NoteIsActive && drawYellow){
+            System.out.println();
         }
 
 
