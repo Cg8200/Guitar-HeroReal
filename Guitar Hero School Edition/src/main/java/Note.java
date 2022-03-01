@@ -14,6 +14,9 @@ public class Note {
     double noteLength;
     Line.NoteType noteType;
     boolean longMissed = false;
+    boolean isPartOfLong = false;
+    boolean wasStartOfLNPlayed = false;
+    int originalHeight;
 
     NoteColor noteColor;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -21,6 +24,9 @@ public class Note {
 
     enum NoteColor {
         Green, Red, Yellow, Blue, Orange
+    }
+    public double getBottomY(){
+        return noteY + Height;
     }
 
     public Note(Line.NoteType noteType, NoteColor noteColor, double length) {
@@ -99,11 +105,21 @@ public class Note {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        originalHeight = Height;
     }
 
     public void Update() {
         double temp = (PlayScreen.framelengthNS / 17000000.0);
         noteY = (noteY + (Speed * temp));
+        if(longMissed && wasStartOfLNPlayed) {
+            Height = originalHeight;
+        }
+        else if(wasStartOfLNPlayed){
+            Height = (int)(920-noteY);
+        }
+        if(Height<0){
+            Height=0;
+        }
     }
 
     public void Draw(Graphics g) {
@@ -120,11 +136,11 @@ public class Note {
     }
 
     public boolean isOnFret(int Y1, int Y2) {
-        if (noteY >= Y1 - 5 && noteY <= Y2 + 5) {
+        if (noteY >= Y1 - 20 && noteY <= Y2 + 20) {
             return true;
-        } else if (noteY + Height >= Y1 - 5 && noteY + Height <= Y2 + 5) {
+        } else if (noteY + Height >= Y1 - 20 && noteY + Height <= Y2 + 20) {
             return true;
-        }else if(noteY <= Y1 + 5 && noteY + Height >= Y2 - 5){
+        }else if(noteY <= Y1 + 20 && noteY + Height >= Y2 - 20){
             return true;
         }
         else {

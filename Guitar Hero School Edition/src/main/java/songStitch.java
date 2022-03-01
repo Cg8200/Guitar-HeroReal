@@ -50,7 +50,7 @@ public class songStitch {
                 }//endregion
 
                 //region Pulling out all chart notes from .chart file
-                p = Pattern.compile("^([0-9]+)(?U)\\s*=(?U)\\s*([NS])(?U)\\s*([0-9]+)(?U)\\s*([0-9]+)(?U)\\s*");
+                p = Pattern.compile("^([0-9]+)(?U)\\s*=(?U)\\s*([N])(?U)\\s*([0-9]+)(?U)\\s*([0-9]+)(?U)\\s*");
                 m = p.matcher(lineOfFile);
                 // if an occurrence if a pattern was found in a given string...
                 if (m.find()) {
@@ -62,11 +62,10 @@ public class songStitch {
             BPM = BPMlist.get(0).value;//fixme-add extended delays & stars
             BPMlist.remove(0);
             int previousTick = 0;
+            int[] previousNotes = new int[]{0, 0, 0, 0, 0};
+            int previousStarLength = 0;
+            int previousStarTick = -1;
             while (NotesList.size() > 0) {
-
-                int[] previousNotes = new int[]{0, 0, 0, 0, 0};
-                int previousStarLength = 0;
-                int previousStarTick = -1;
                 LinkedList<ChartNote> currentChartNoteSet = new LinkedList<>();
                 currentChartNoteSet.add(NotesList.remove(0));
                 //currentChartNoteSet has a value
@@ -90,9 +89,7 @@ public class songStitch {
                         ns = 0;
                     }
                 }
-                boolean isWhite = numbTicks <= resolution / 4;
-                boolean isStar = false;//fixme
-                boolean isExtended = currentNote.Length > 0 && currentNote.NoteType.equals("N");
+
                 int[] currentNotes = new int[]{0, 0, 0, 0, 0};
                 for (int i = 0; i < currentChartNoteSet.size(); i++) {
 
@@ -112,6 +109,23 @@ public class songStitch {
                     if (currentChartNoteSet.get(i).noteNumber == 4) {
                         currentNotes[4] = 1;
                     }
+
+                    if (currentChartNoteSet.get(i).noteNumber == 6) {
+                        //open purple note stuff
+                    }//endregion
+
+                }
+                boolean sameNotes = currentNotes[0] == previousNotes[0]
+                        && currentNotes[1] == previousNotes[1]
+                        && currentNotes[2] == previousNotes[2]
+                        && currentNotes[3] == previousNotes[3]
+                        && currentNotes[4] == previousNotes[4];
+                boolean isWhite = numbTicks <= resolution / 4 && !sameNotes;
+                boolean isStar = false;//fixme
+                boolean isExtended = currentNote.Length > 0 && currentNote.NoteType.equals("N");
+
+                for (int i = 0; i < currentChartNoteSet.size(); i++) {
+
                     if (currentChartNoteSet.get(i).noteNumber == 5) {
                         isWhite = false;
                     }
@@ -125,7 +139,7 @@ public class songStitch {
                 Line.NoteType Yellow = makeType(currentNotes[2], isWhite, isStar, false);
                 Line.NoteType Blue = makeType(currentNotes[3], isWhite, isStar, false);
                 Line.NoteType Orange = makeType(currentNotes[4], isWhite, isStar, false);
-                PlayScreen.linesList.add(new Line(ns, Green, Red, Yellow, Blue, Orange,0,0,0,0,0));
+                PlayScreen.linesList.add(new Line(ns, Green, Red, Yellow, Blue, Orange,0,0,0,0,0,isExtended));
                 if(isExtended){
                     currentNotes = new int[]{0, 0, 0, 0, 0};
                     double[] currentLengths = new double[]{0, 0, 0, 0, 0};
@@ -158,7 +172,7 @@ public class songStitch {
                      Yellow = makeType(currentNotes[2], isWhite, isStar, isExtended);
                      Blue = makeType(currentNotes[3], isWhite, isStar, isExtended);
                     Orange = makeType(currentNotes[4], isWhite, isStar, isExtended);
-                    PlayScreen.linesList.add(new Line(1, Green, Red, Yellow, Blue, Orange,currentLengths[0],currentLengths[1],currentLengths[2],currentLengths[3],currentLengths[4]));
+                    PlayScreen.linesList.add(new Line(1, Green, Red, Yellow, Blue, Orange,currentLengths[0],currentLengths[1],currentLengths[2],currentLengths[3],currentLengths[4],false));
                 }
 
              /*   long realFrames = frames;
@@ -203,7 +217,7 @@ public class songStitch {
                 makeType(0, false, false, false),
                 makeType(0, false, false, false),
                 makeType(0, false, false, false),
-                makeType(0, false, false, false),0,0,0,0,0));
+                makeType(0, false, false, false),0,0,0,0,0,false));
 
         if (PlayScreen.linesList.size() > 0) {
             PlayScreen.currentLine = PlayScreen.linesList.remove();

@@ -40,30 +40,45 @@ public class NoteSet {
             greenNote.Update();
             if(greenNote.noteY>yValueToRemove){
                 NoteIsActive = false;
+                if(greenNote.noteLength==0) {
+                    PlayScreen.noteStreak = 0;
+                }
             }
         }
         if(redNote!=null){
             redNote.Update();
             if(redNote.noteY>yValueToRemove){
                 NoteIsActive = false;
+                if(redNote.noteLength==0) {
+                    PlayScreen.noteStreak = 0;
+                }
             }
         }
         if(yellowNote!=null){
             yellowNote.Update();
             if(yellowNote.noteY>yValueToRemove){
                 NoteIsActive = false;
+                if(yellowNote.noteLength==0) {
+                    PlayScreen.noteStreak = 0;
+                }
             }
         }
         if(blueNote!=null){
             blueNote.Update();
             if(blueNote.noteY>yValueToRemove){
                 NoteIsActive = false;
+                if(blueNote.noteLength==0) {
+                    PlayScreen.noteStreak = 0;
+                }
             }
         }
         if(orangeNote !=null){
             orangeNote.Update();
             if(orangeNote.noteY>yValueToRemove){
                 NoteIsActive = false;
+                if(orangeNote.noteLength==0) {
+                    PlayScreen.noteStreak = 0;
+                }
             }
         }
     }

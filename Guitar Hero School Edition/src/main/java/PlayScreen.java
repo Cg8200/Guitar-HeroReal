@@ -51,7 +51,7 @@ public class PlayScreen {
     boolean drawYellow= false;
     boolean drawBlue= false;
     boolean drawOrange= false;
-    static MP3player mp3Player;
+    static MP3player missSound;
     //Chart file stuff
     static int resolution = 192;
     double totalNSsinceNote = 0;
@@ -59,9 +59,11 @@ public class PlayScreen {
 
 
 
-    int noteStreak;
+    static int noteStreak;
     //region sets images
     public PlayScreen() {
+        String filename = "src/main/resources/missed.mp3";
+        missSound = new MP3player(filename);//Fixme
         lastNoteSetPlayed = new NoteSet(null, null,null,null,null);
             GreenFretIdle = new Image("src/main/resources/GreenFret.png",710, 880, 80, 80,false);
             RedFretIdle = new Image("src/main/resources/RedFret.png",810, 880, 80, 80,false);
@@ -79,7 +81,7 @@ public class PlayScreen {
             BlueFret = BlueFretIdle;
             OrangeFretPlayed =  new Image("src/main/resources/OrangeFretPlayed.png",1110, 880, 80, 80,true);
             OrangeFret = OrangeFretIdle;
-            HitBox = new Image("src/main/resources/Hitbox.png",650, 870, 600, 130,false);
+            HitBox = new Image("src/main/resources/Hitbox.png",650, 850, 600, 400,false);
 
             GreenFire = new Fire("src/main/resources/fire.png",710, 880, 80, 80,false);
             RedFire = new Fire("src/main/resources/fire.png",810, 880, 80, 80,false);
@@ -141,7 +143,12 @@ public class PlayScreen {
         BlueFire.Draw(g);
         OrangeFire.Draw(g);
 
-
+        g.drawString(String.valueOf(noteStreak),20,20);
+        g.drawString("drawGreen: "+String.valueOf(drawGreen),20,40);
+        g.drawString("drawRed: "+String.valueOf(drawGreen),20,60);
+        g.drawString("drawYellow: "+String.valueOf(drawGreen),20,80);
+        g.drawString("drawBlue: "+String.valueOf(drawGreen),20,100);
+        g.drawString("drawOrange: "+String.valueOf(drawGreen),20,120);
 
 
     } //endregion
@@ -186,8 +193,12 @@ public class PlayScreen {
 
             frameCount = 0;
             if (linesList.size() > 0) {
+
                 currentLine = linesList.remove();
                 if(currentLine.greenLength != 0 || currentLine.redlength != 0 || currentLine.yellowLength != 0 || currentLine.blueLength != 0 || currentLine.orangeLength != 0){
+                    if(linesList.size()<=4){
+                        System.out.println();
+                    }
                     totalNSsinceNote = totalNSsinceNote - currentLine.delay;
                     // System.out.println(currentLine.Green + ", " + currentLine.Red + ", " + currentLine.Yellow + ", " + currentLine.Blue + ", " + currentLine.Orange + ", ");
                      greenNote = null;
@@ -238,6 +249,7 @@ public class PlayScreen {
         for (int i = 0; i < LongNoteSet.size(); i++) {
             LongNoteSet.get(i).Update(HitBox.y + HitBox.Height);
         }
+
         for (int i = 0; i < LongNoteSet.size(); i++) {
             if (!LongNoteSet.get(i).NoteIsActive) {
                 LongNoteSet.remove(i);
@@ -250,42 +262,67 @@ public class PlayScreen {
 
         //longnote ifmissed stuff
          if(LongNoteSet.size()>0 && aNoteOnFret(LongNoteSet)) {
-            if (LongNoteSet.getFirst().greenNote != null && LongNoteSet.getFirst().greenNote.longMissed==false) {
-                if ( GreenFret == GreenFretPlayed) {
-                    drawGreen = true;
-                } else {
-                    LongNoteSet.getFirst().greenNote.noteMissed();
-                }
-            }
-            if (LongNoteSet.getFirst().redNote != null && LongNoteSet.getFirst().redNote.longMissed==false) {
-                if ( RedFret == RedFretPlayed) {
-                    drawRed = true;
-                } else {
-                    LongNoteSet.getFirst().redNote.noteMissed();
-                }
-            }
-            if ( LongNoteSet.getFirst().yellowNote != null && LongNoteSet.getFirst().yellowNote.longMissed==false) {
-                if (YellowFret == YellowFretPlayed) {
-                    drawYellow = true;
-                } else {
-                    LongNoteSet.getFirst().yellowNote.noteMissed();
-                }
-            }
-            if (LongNoteSet.getFirst().blueNote != null && LongNoteSet.getFirst().blueNote.longMissed==false) {
-                if ( BlueFret == BlueFretPlayed) {
-                    drawBlue = true;
-                } else {
-                    LongNoteSet.getFirst().blueNote.noteMissed();
-                }
-            }
-            if ( LongNoteSet.getFirst().orangeNote != null && LongNoteSet.getFirst().orangeNote.longMissed==false) {
-                if (OrangeFret == OrangeFretPlayed) {
-                    drawOrange = true;
-                } else {
-                    LongNoteSet.getFirst().orangeNote.noteMissed();
-                }
-            }
-        }
+             if (LongNoteSet.getFirst().greenNote != null) {
+                 if (LongNoteSet.getFirst().greenNote.wasStartOfLNPlayed) {
+                     if (LongNoteSet.getFirst().greenNote.longMissed == false) {
+                         if (GreenFret == GreenFretPlayed) {
+                             drawGreen = true;
+                         } else {
+                             LongNoteSet.getFirst().greenNote.noteMissed();
+
+                         }
+                     }
+                 }
+             }
+             if (LongNoteSet.getFirst().redNote != null) {
+                 if (LongNoteSet.getFirst().redNote.wasStartOfLNPlayed) {
+                     if (LongNoteSet.getFirst().redNote.longMissed == false) {
+                         if (RedFret == RedFretPlayed) {
+                             drawRed = true;
+                         } else {
+                             LongNoteSet.getFirst().redNote.noteMissed();
+
+                         }
+                     }
+                 }
+             }
+             if (LongNoteSet.getFirst().yellowNote != null) {
+                 if (LongNoteSet.getFirst().yellowNote.wasStartOfLNPlayed) {
+                     if (LongNoteSet.getFirst().yellowNote.longMissed == false) {
+                         if (YellowFret == YellowFretPlayed) {
+                             drawYellow = true;
+                         } else {
+                             LongNoteSet.getFirst().yellowNote.noteMissed();
+
+                         }
+                     }
+                 }
+             }
+             if (LongNoteSet.getFirst().blueNote != null) {
+                 if (LongNoteSet.getFirst().blueNote.wasStartOfLNPlayed) {
+                     if (LongNoteSet.getFirst().blueNote.longMissed == false) {
+                         if (BlueFret == BlueFretPlayed) {
+                             drawBlue = true;
+                         } else {
+                             LongNoteSet.getFirst().blueNote.noteMissed();
+
+                         }
+                     }
+                 }
+             }
+             if (LongNoteSet.getFirst().orangeNote != null) {
+                 if (LongNoteSet.getFirst().orangeNote.wasStartOfLNPlayed) {
+                     if (LongNoteSet.getFirst().orangeNote.longMissed == false) {
+                         if (OrangeFret == OrangeFretPlayed) {
+                             drawOrange = true;
+                         } else {
+                             LongNoteSet.getFirst().orangeNote.noteMissed();
+
+                         }
+                     }
+                 }
+             }
+         }
         if(LongNoteSet.size()>0 && !LongNoteSet.getFirst().NoteIsActive && drawYellow){
             System.out.println();
         }
@@ -316,11 +353,12 @@ public class PlayScreen {
         //region button pressed notes on screen
         if(NoteSetList.size()>0) {
             if ((Game.ButtonCode.STRUM_UP == buttonCode || Game.ButtonCode.STRUM_DOWN == buttonCode)) {
+
                 try {
                     if (aNoteOnFret(NoteSetList)) {
                         if (CorrectFrets(false)) {
 
-                            System.out.println(noteStreak);
+
                             if ((GreenFret==GreenFretPlayed)) {
                                 GreenFire.DisplayFire();
                             }
@@ -400,13 +438,45 @@ public class PlayScreen {
     }
     public  void NoteMissed(){
         noteStreak = 0;
+        missSound.play();
         lastNoteSetPlayed = new NoteSet(null, null,null,null,null);
     }
     public void NotePlayed(){
         lastNoteSetPlayed = NoteSetList.get(0);
         NoteSetList.get(0).NoteIsActive = false;
         noteStreak = noteStreak + 1;
+        int i = 0;
+        while(i < LongNoteSet.size()){
+            if(LongNoteSet.get(i).greenNote!=null&&lastNoteSetPlayed.greenNote!=null) {
+                if (lastNoteSetPlayed.greenNote.noteY -20< LongNoteSet.get(i).greenNote.getBottomY() && lastNoteSetPlayed.greenNote.getBottomY() > LongNoteSet.get(i).greenNote.getBottomY()) {
+                    LongNoteSet.get(i).greenNote.wasStartOfLNPlayed = true;
+                }
+            }
+            if(LongNoteSet.get(i).redNote!=null&&lastNoteSetPlayed.redNote!=null) {
+                if (lastNoteSetPlayed.redNote.noteY -20< LongNoteSet.get(i).redNote.getBottomY() && lastNoteSetPlayed.redNote.getBottomY() > LongNoteSet.get(i).redNote.getBottomY()) {
+                    LongNoteSet.get(i).redNote.wasStartOfLNPlayed = true;
+                }
+            }
+            if(LongNoteSet.get(i).yellowNote!=null&&lastNoteSetPlayed.yellowNote!=null) {
+                if (lastNoteSetPlayed.yellowNote.noteY -20< LongNoteSet.get(i).yellowNote.getBottomY() && lastNoteSetPlayed.yellowNote.getBottomY() > LongNoteSet.get(i).yellowNote.getBottomY()) {
+                    LongNoteSet.get(i).yellowNote.wasStartOfLNPlayed = true;
+                }
+            }
+            if(LongNoteSet.get(i).blueNote!=null&&lastNoteSetPlayed.blueNote!=null) {
+                if (lastNoteSetPlayed.blueNote.noteY -20< LongNoteSet.get(i).blueNote.getBottomY() && lastNoteSetPlayed.blueNote.getBottomY() > LongNoteSet.get(i).blueNote.getBottomY()) {
+                    LongNoteSet.get(i).blueNote.wasStartOfLNPlayed = true;
+                }
+            }
+            if(LongNoteSet.get(i).orangeNote!=null&&lastNoteSetPlayed.orangeNote!=null) {
+                if (lastNoteSetPlayed.orangeNote.noteY -20< LongNoteSet.get(i).orangeNote.getBottomY() && lastNoteSetPlayed.orangeNote.getBottomY() > LongNoteSet.get(i).orangeNote.getBottomY()) {
+                    LongNoteSet.get(i).orangeNote.wasStartOfLNPlayed = true;
+                }
+            }
+            i++;
+        }
     }
+
+
     //region sets correct fret information
     public boolean CorrectFrets(boolean includeLastNote){
         boolean GreenNoteExpected = NoteSetList.get(0).greenNote != null || (includeLastNote && lastNoteSetPlayed.greenNote != null);

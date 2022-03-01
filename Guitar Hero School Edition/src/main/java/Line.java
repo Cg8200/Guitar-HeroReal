@@ -16,8 +16,9 @@ public class Line {
     double yellowLength;
     double blueLength;
     double orangeLength;
+    boolean isPartOfLong;
 
-    public Line(double delay, NoteType green, NoteType red, NoteType yellow, NoteType blue, NoteType orange, double greenLength, double redLength, double yellowLength, double blueLength,double orangeLength) {
+    public Line(double delay, NoteType green, NoteType red, NoteType yellow, NoteType blue, NoteType orange, double greenLength, double redLength, double yellowLength, double blueLength,double orangeLength, boolean isPartOfLong) {
         this.delay = delay;
         Green = green;
         Red = red;
@@ -29,5 +30,6 @@ public class Line {
         this.yellowLength = yellowLength;
         this.blueLength = blueLength;
         this.orangeLength = orangeLength;
+        this.isPartOfLong = isPartOfLong;
     }
 }
