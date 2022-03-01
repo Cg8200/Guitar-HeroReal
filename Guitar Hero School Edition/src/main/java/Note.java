@@ -111,7 +111,10 @@ public class Note {
     public void Update() {
         double temp = (PlayScreen.framelengthNS / 17000000.0);
         noteY = (noteY + (Speed * temp));
-        if(longMissed && wasStartOfLNPlayed) {
+        if(longMissed && wasStartOfLNPlayed && Height<25){
+            Height =0;
+        }
+        else if(longMissed && wasStartOfLNPlayed) {
             Height = originalHeight;
         }
         else if(wasStartOfLNPlayed){
