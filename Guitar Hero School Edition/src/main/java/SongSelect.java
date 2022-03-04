@@ -15,7 +15,8 @@ public class SongSelect extends MenuScreen {
         buttons.add(new Button("DA-games - build our machine", screenWidth / 2, screenHeight / 2 + 30, 20));
         buttons.add(new Button("Motley Crue - kickstart my heart", screenWidth / 2, screenHeight / 2 + 60, 20));
         buttons.add(new Button("Journey - any way you want it", screenWidth / 2, screenHeight / 2 + 90, 20));
-        buttons.add(new Button("BACK", screenWidth / 2, screenHeight / 2 + 120, 20));
+        buttons.add(new Button("BucketHead - Jordan", screenWidth / 2, screenHeight / 2 + 120, 20));
+        buttons.add(new Button("BACK", screenWidth / 2, screenHeight / 2 + 160, 20));
         try {
             image = ImageIO.read(new File("src/main/resources/songSelect.jpg"));
         } catch (IOException e) {
@@ -47,6 +48,11 @@ public class SongSelect extends MenuScreen {
         }
         if (buttons.get(activeButtonIndex).btntxt.equals("Journey - any way you want it")) {
             songStitch.loadSong("src/main/resources/Journey - any way you want it");
+            Game.playIsActive = true;
+            Game.songSelectIsActive = false;
+        }
+        if (buttons.get(activeButtonIndex).btntxt.equals("BucketHead - Jordan")) {
+            songStitch.loadSong("src/main/resources/BucketHead - Jordan");
             Game.playIsActive = true;
             Game.songSelectIsActive = false;
         }
