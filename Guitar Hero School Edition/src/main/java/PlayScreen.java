@@ -13,7 +13,7 @@ public class PlayScreen {
     static LinkedList<NoteSet> LongNoteSet = new LinkedList<>();
     boolean drawNoNoteOnFretTest = false;
     boolean drawNoNoteWithCorrectFretsTest = false;
-    int playedIndex = 0;
+    int playedIndex;
     int notesOnFret = 0;
     Image GreenFret;
     Image RedFret;
@@ -158,6 +158,7 @@ public class PlayScreen {
 
         if(drawNoNoteWithCorrectFretsTest){
             g.drawImage(OrangeNoteSpark.image,200, 400, OrangeNoteSpark.Width, OrangeNoteSpark.Height, null);
+
         }
         if(drawNoNoteOnFretTest){
             g.drawImage(OrangeFire.image,300, 600, OrangeNoteSpark.Width, OrangeNoteSpark.Height, null);
@@ -169,6 +170,8 @@ public class PlayScreen {
         g.setFont(myFont);
         g.setColor(Color.RED);
         g.drawString("Notes on Fret:"+String.valueOf(notesOnFret),20,250);
+        g.setColor(Color.RED);
+        g.drawString("Played Idx::"+String.valueOf(playedIndex),20,300);
 
     } //endregion
 
@@ -284,7 +287,7 @@ public class PlayScreen {
             strumHappened =false;
             drawNoNoteWithCorrectFretsTest=true;
             try {
-                playedIndex = NoteSetList.size();
+                playedIndex = -1;
                 for(int i=0; i<NoteSetList.size(); i++){
                     if(!aNoteOnFret(NoteSetList.get(i))){
                         drawNoNoteOnFretTest =true;
@@ -298,9 +301,9 @@ public class PlayScreen {
                     }
                 }
                 //if a correct note was played on the hitbox
-                if(playedIndex<NoteSetList.size()) {
+                if(playedIndex<NoteSetList.size() && playedIndex !=-1) {
                     if(playedIndex>0) {
-                     //   NoteMissed();
+                        NoteMissed();
 
                         //mark all of the notes to remove
                         for (int i = 0; i < playedIndex; i++) {

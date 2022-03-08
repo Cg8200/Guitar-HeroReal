@@ -50,6 +50,7 @@ public class Note {
         Height = 60;
 
         Speed = 10;
+        Speed = (int)(Game.debugMode ? Speed *Game.debugRate :Speed);
         try {
             if (noteColor == NoteColor.Green) {
                 if (noteType == Line.NoteType.regular) {

@@ -13,6 +13,7 @@ public class songStitch {
    static int resolution = 192;
    static int BPM;
    static int TS;
+   public static int startTickNumber = 14592;
 
     public static void loadSong(String pathname) {
         LinkedList<ChartNote> NotesList= new LinkedList<>();
@@ -38,7 +39,7 @@ public class songStitch {
                 m = p.matcher(lineOfFile);
                 // if an occurrence if a pattern was found in a given string...
                 if (m.find()) {
-                    BPMlist.add(new tickandvalue(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2))));
+                    BPMlist.add(new tickandvalue(Integer.parseInt(m.group(1))-startTickNumber, Integer.parseInt(m.group(2))));
                 }//endregion
 
                 //region getting time scale from .chart file
@@ -46,7 +47,7 @@ public class songStitch {
                 m = p.matcher(lineOfFile);
                 // if an occurrence if a pattern was found in a given string...
                 if (m.find()) {
-                    TSlist.add(new tickandvalue(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2))));
+                    TSlist.add(new tickandvalue(Integer.parseInt(m.group(1))-startTickNumber, Integer.parseInt(m.group(2))));
                 }//endregion
 
                 //region Pulling out all chart notes from .chart file
@@ -54,7 +55,7 @@ public class songStitch {
                 m = p.matcher(lineOfFile);
                 // if an occurrence if a pattern was found in a given string...
                 if (m.find()) {
-                    NotesList.add(new ChartNote(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(3)), m.group(2), Integer.parseInt(m.group(4))));
+                    NotesList.add(new ChartNote(Integer.parseInt(m.group(1))-startTickNumber, Integer.parseInt(m.group(3)), m.group(2), Integer.parseInt(m.group(4))));
                 }//endregion
 
             }
@@ -81,99 +82,103 @@ public class songStitch {
                     BPM = BPMlist.get(0).value;
                     BPMlist.remove(0);
                 }
-                int numbTicks = currentNote.tickNumber - previousTick;//numticks set to numtics between notes
-                double ns = getNumNS(resolution, BPM, numbTicks);//convert to nanoseconds
-                if(previousTick == 0){//adjustment for first note
-                    ns = ns - (81*17000000.0) ;
-                    if(ns < 0){
-                        ns = 0;
-                    }
-                }
-
-                int[] currentNotes = new int[]{0, 0, 0, 0, 0};
-                for (int i = 0; i < currentChartNoteSet.size(); i++) {
-
-                    //region separates note types by number
-                    if (currentChartNoteSet.get(i).noteNumber == 0) {
-                        currentNotes[0] = 1;
-                    }
-                    if (currentChartNoteSet.get(i).noteNumber == 1) {
-                        currentNotes[1] = 1;
-                    }
-                    if (currentChartNoteSet.get(i).noteNumber == 2) {
-                        currentNotes[2] = 1;
-                    }
-                    if (currentChartNoteSet.get(i).noteNumber == 3) {
-                        currentNotes[3] = 1;
-                    }
-                    if (currentChartNoteSet.get(i).noteNumber == 4) {
-                        currentNotes[4] = 1;
+               // if(currentNote.tickNumber>=startTickNumber) {
+                    int numbTicks = currentNote.tickNumber - previousTick;//numticks set to numtics between notes
+                    double ns = getNumNS(resolution, BPM, numbTicks);//convert to nanoseconds
+                    ns = Game.debugMode ? ns / Game.debugRate : ns;
+                    if (previousTick == 0) {//adjustment for first note
+                        ns = ns - (81 * 17000000.0);
+                        if (ns < 0) {
+                            ns = 0;
+                        }
                     }
 
-                    if (currentChartNoteSet.get(i).noteNumber == 6) {
-                        //open purple note stuff
-                    }//endregion
-
-                }
-                boolean sameNotes = currentNotes[0] == previousNotes[0]
-                        && currentNotes[1] == previousNotes[1]
-                        && currentNotes[2] == previousNotes[2]
-                        && currentNotes[3] == previousNotes[3]
-                        && currentNotes[4] == previousNotes[4];
-                boolean isWhite = numbTicks <= resolution / 4 && !sameNotes;
-                boolean isStar = false;//fixme
-                boolean isExtended = currentNote.Length > 0 && currentNote.NoteType.equals("N");
-
-                for (int i = 0; i < currentChartNoteSet.size(); i++) {
-
-                    if (currentChartNoteSet.get(i).noteNumber == 5) {
-                        isWhite = false;
-                    }
-                    if (currentChartNoteSet.get(i).noteNumber == 6) {
-                        //open purple note stuff
-                    }//endregion
-
-                }
-                Line.NoteType Green = makeType(currentNotes[0], isWhite, isStar, false);
-                Line.NoteType Red = makeType(currentNotes[1], isWhite, isStar, false);
-                Line.NoteType Yellow = makeType(currentNotes[2], isWhite, isStar, false);
-                Line.NoteType Blue = makeType(currentNotes[3], isWhite, isStar, false);
-                Line.NoteType Orange = makeType(currentNotes[4], isWhite, isStar, false);
-                PlayScreen.linesList.add(new Line(ns, Green, Red, Yellow, Blue, Orange,0,0,0,0,0,isExtended));
-                if(isExtended){
-                    currentNotes = new int[]{0, 0, 0, 0, 0};
-                    double[] currentLengths = new double[]{0, 0, 0, 0, 0};
+                    int[] currentNotes = new int[]{0, 0, 0, 0, 0};
                     for (int i = 0; i < currentChartNoteSet.size(); i++) {
 
                         //region separates note types by number
                         if (currentChartNoteSet.get(i).noteNumber == 0) {
                             currentNotes[0] = 1;
-                            currentLengths[0] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
                         }
                         if (currentChartNoteSet.get(i).noteNumber == 1) {
                             currentNotes[1] = 1;
-                            currentLengths[1] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
                         }
                         if (currentChartNoteSet.get(i).noteNumber == 2) {
                             currentNotes[2] = 1;
-                            currentLengths[2] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
                         }
                         if (currentChartNoteSet.get(i).noteNumber == 3) {
                             currentNotes[3] = 1;
-                            currentLengths[3] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
                         }
                         if (currentChartNoteSet.get(i).noteNumber == 4) {
                             currentNotes[4] = 1;
-                            currentLengths[4] = getNumNS(resolution,BPM,currentChartNoteSet.get(i).Length);
                         }
+
+                        if (currentChartNoteSet.get(i).noteNumber == 6) {
+                            //open purple note stuff
+                        }//endregion
+
                     }
-                     Green = makeType(currentNotes[0], isWhite, isStar, isExtended);
-                     Red = makeType(currentNotes[1], isWhite, isStar, isExtended);
-                     Yellow = makeType(currentNotes[2], isWhite, isStar, isExtended);
-                     Blue = makeType(currentNotes[3], isWhite, isStar, isExtended);
-                    Orange = makeType(currentNotes[4], isWhite, isStar, isExtended);
-                    PlayScreen.linesList.add(new Line(1, Green, Red, Yellow, Blue, Orange,currentLengths[0],currentLengths[1],currentLengths[2],currentLengths[3],currentLengths[4],false));
-                }
+                    boolean sameNotes = currentNotes[0] == previousNotes[0]
+                            && currentNotes[1] == previousNotes[1]
+                            && currentNotes[2] == previousNotes[2]
+                            && currentNotes[3] == previousNotes[3]
+                            && currentNotes[4] == previousNotes[4];
+                    boolean isWhite = numbTicks <= resolution / 4 && !sameNotes;
+                    boolean isStar = false;//fixme
+                    boolean isExtended = currentNote.Length > 0 && currentNote.NoteType.equals("N");
+
+                    for (int i = 0; i < currentChartNoteSet.size(); i++) {
+
+                        if (currentChartNoteSet.get(i).noteNumber == 5) {
+                            isWhite = false;
+                        }
+                        if (currentChartNoteSet.get(i).noteNumber == 6) {
+                            //open purple note stuff
+                        }//endregion
+
+                    }
+                    Line.NoteType Green = makeType(currentNotes[0], isWhite, isStar, false);
+                    Line.NoteType Red = makeType(currentNotes[1], isWhite, isStar, false);
+                    Line.NoteType Yellow = makeType(currentNotes[2], isWhite, isStar, false);
+                    Line.NoteType Blue = makeType(currentNotes[3], isWhite, isStar, false);
+                    Line.NoteType Orange = makeType(currentNotes[4], isWhite, isStar, false);
+
+                    PlayScreen.linesList.add(new Line(ns, Green, Red, Yellow, Blue, Orange, 0, 0, 0, 0, 0, isExtended));
+                    if (isExtended) {
+                        currentNotes = new int[]{0, 0, 0, 0, 0};
+                        double[] currentLengths = new double[]{0, 0, 0, 0, 0};
+                        for (int i = 0; i < currentChartNoteSet.size(); i++) {
+
+                            //region separates note types by number
+                            if (currentChartNoteSet.get(i).noteNumber == 0) {
+                                currentNotes[0] = 1;
+                                currentLengths[0] = getNumNS(resolution, BPM, currentChartNoteSet.get(i).Length);
+                            }
+                            if (currentChartNoteSet.get(i).noteNumber == 1) {
+                                currentNotes[1] = 1;
+                                currentLengths[1] = getNumNS(resolution, BPM, currentChartNoteSet.get(i).Length);
+                            }
+                            if (currentChartNoteSet.get(i).noteNumber == 2) {
+                                currentNotes[2] = 1;
+                                currentLengths[2] = getNumNS(resolution, BPM, currentChartNoteSet.get(i).Length);
+                            }
+                            if (currentChartNoteSet.get(i).noteNumber == 3) {
+                                currentNotes[3] = 1;
+                                currentLengths[3] = getNumNS(resolution, BPM, currentChartNoteSet.get(i).Length);
+                            }
+                            if (currentChartNoteSet.get(i).noteNumber == 4) {
+                                currentNotes[4] = 1;
+                                currentLengths[4] = getNumNS(resolution, BPM, currentChartNoteSet.get(i).Length);
+                            }
+                        }
+                        Green = makeType(currentNotes[0], isWhite, isStar, isExtended);
+                        Red = makeType(currentNotes[1], isWhite, isStar, isExtended);
+                        Yellow = makeType(currentNotes[2], isWhite, isStar, isExtended);
+                        Blue = makeType(currentNotes[3], isWhite, isStar, isExtended);
+                        Orange = makeType(currentNotes[4], isWhite, isStar, isExtended);
+                        PlayScreen.linesList.add(new Line(1, Green, Red, Yellow, Blue, Orange, currentLengths[0], currentLengths[1], currentLengths[2], currentLengths[3], currentLengths[4], false));
+                    }
+
 
              /*   long realFrames = frames;
                 if(previousTick == 0){
@@ -184,15 +189,16 @@ public class songStitch {
 
                 writeToFile(  ticks+ ": "+numbTicks+ ", "+frames +": "+realFrames + ", "+ Green  + ", "+ Red  + ", "+ Yellow + ", "+ Blue + ", "+ Orange + "\n");
 */
-                //5 = forced note for that tick
-                previousNotes[0] = currentNotes[0];
-                previousNotes[1] = currentNotes[1];
-                previousNotes[2] = currentNotes[2];
-                previousNotes[3] = currentNotes[3];
-                previousNotes[4] = currentNotes[4];
-                previousTick = currentNote.tickNumber;
-                currentChartNoteSet.clear();
-            }
+                    //5 = forced note for that tick
+                    previousNotes[0] = currentNotes[0];
+                    previousNotes[1] = currentNotes[1];
+                    previousNotes[2] = currentNotes[2];
+                    previousNotes[3] = currentNotes[3];
+                    previousNotes[4] = currentNotes[4];
+                    previousTick = currentNote.tickNumber;
+                    currentChartNoteSet.clear();
+                }
+
 
 
             //  }

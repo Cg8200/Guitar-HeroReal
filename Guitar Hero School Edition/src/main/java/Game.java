@@ -32,7 +32,8 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
     enum ButtonCode {
         GREEN, RED, YELLOW, BLUE, ORANGE, STRUM_UP, STRUM_DOWN,  D_LEFT, D_RIGHT, BACK, START, BAD
     }
-
+public static boolean debugMode = true;
+    public static double debugRate = .25;
     public Game(){
         // region screen creation
         mainMenu = new MainMenu();
@@ -40,7 +41,8 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         playScreen = new PlayScreen();
         credits = new Credits();
         //endregion
-        Timer timer = new Timer(17, this);//setup framerate
+        int delay = (int) (debugMode ? 17/debugRate : 17);
+        Timer timer = new Timer(delay, this);//setup framerate
        //region window setup
         JFrame jframe = new JFrame();
         renderer = new Renderer();
