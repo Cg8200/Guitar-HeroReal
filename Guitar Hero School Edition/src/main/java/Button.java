@@ -17,12 +17,12 @@ public class Button {
     boolean isSelected;
     BufferedImage image = null;
 
+
     public Button(String btntxt, int btnX, int btnY, int btnHeight) {
         this.btntxt = btntxt;
         this.btnX = btnX;
-        this.btnY = btnY-btnHeight;
+        this.btnY = btnY;
         this.btnHeight = btnHeight;
-        this.btnWidth = btntxt.length() * btnHeight * 67 / 100;
         this.isSelected = isSelected;
         try {
             image = ImageIO.read(new File("src/main/resources/SelectButton.png"));
@@ -33,12 +33,20 @@ public class Button {
     }
 
     public void Draw(Graphics g) {
-        g.setColor(Color.green);
-        if (isSelected) {
-            g.drawImage(image,btnX, btnY, btnWidth, btnHeight, null);
-        }
+        g.setColor(Color.white);
 
         Font myFont = new Font("TimesRoman", Font.PLAIN, btnHeight - 4);
+        FontMetrics metrics = g.getFontMetrics(myFont);
+        btnWidth = metrics.stringWidth(btntxt)+23;
+        if (isSelected) {
+             myFont = new Font("TimesRoman", Font.BOLD, btnHeight - 4);
+             metrics = g.getFontMetrics(myFont);
+            g.setColor(Color.black);
+            btnWidth = metrics.stringWidth(btntxt)+23;
+            g.drawImage(image,btnX, btnY-btnHeight, btnWidth, btnHeight, null);
+
+        }
+
         g.setFont(myFont);
         g.drawString(btntxt, btnX + btnHeight / 2, btnY - btnHeight / 5);
 
