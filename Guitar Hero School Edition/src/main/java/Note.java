@@ -140,11 +140,11 @@ public class Note {
     }
 
     public boolean isOnFret(int Y1, int Y2) {
-        if (noteY >= Y1 - 20 && noteY <= Y2 + 20) {
+        if (noteY >= Y1 && noteY <= Y2) {
             return true;
-        } else if (noteY + Height >= Y1 - 20 && noteY + Height <= Y2 + 20) {
+        } else if (noteY + Height >= Y1 && noteY + Height <= Y2) {
             return true;
-        }else if(noteY <= Y1 + 20 && noteY + Height >= Y2 - 20){
+        }else if(noteY <= Y1 && noteY + Height >= Y2){
             return true;
         }
         else {

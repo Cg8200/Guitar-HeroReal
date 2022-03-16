@@ -13,10 +13,10 @@ public class MainMenu extends MenuScreen{
 
     public MainMenu() {
         super();
-        buttons.add( new Button("Quick Play", screenWidth/2, screenHeight/2,20 ));
-        buttons.add( new Button("Options", screenWidth/2, screenHeight/2+40,20));
-        buttons.add( new Button("Credits", screenWidth/2, screenHeight/2+80,20));
-        buttons.add( new Button("Quit", screenWidth/2, screenHeight/2+120,20));
+        buttons.add( new Button("Quick Play", (int)(screenWidth/2.28),screenHeight/2,40));
+        buttons.add( new Button("Options", (int) (screenWidth/2.2), screenHeight/2+50,40));
+        buttons.add( new Button("Credits", (int)(screenWidth/2.2), screenHeight/2+100,40));
+        buttons.add( new Button("Quit", (int)(screenWidth/2.15), screenHeight/2+150,40));
         try {
             image = ImageIO.read(new File("src/main/resources/mainMenuPic.jpg"));
         } catch (IOException e) {

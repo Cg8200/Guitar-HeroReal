@@ -42,6 +42,13 @@ public class NoteSet {
                 NoteIsActive = false;
                 if(greenNote.noteLength==0) {
                     PlayScreen.noteStreak = 0;
+                    for (int i = 0; i < PlayScreen.LongNoteSet.size(); i++) {
+                        if(PlayScreen.LongNoteSet.get(i).greenNote!=null) {
+                            if (greenNote.noteY - 20 < PlayScreen.LongNoteSet.get(i).greenNote.getBottomY() && greenNote.getBottomY() > PlayScreen.LongNoteSet.get(i).greenNote.getBottomY()) {
+                                PlayScreen.LongNoteSet.get(i).greenNote.noteMissed();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -51,6 +58,13 @@ public class NoteSet {
                 NoteIsActive = false;
                 if(redNote.noteLength==0) {
                     PlayScreen.noteStreak = 0;
+                    for (int i = 0; i < PlayScreen.LongNoteSet.size(); i++) {
+                        if(PlayScreen.LongNoteSet.get(i).redNote!=null) {
+                            if (redNote.noteY - 20 < PlayScreen.LongNoteSet.get(i).redNote.getBottomY() && redNote.getBottomY() > PlayScreen.LongNoteSet.get(i).redNote.getBottomY()) {
+                                PlayScreen.LongNoteSet.get(i).redNote.noteMissed();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -60,6 +74,13 @@ public class NoteSet {
                 NoteIsActive = false;
                 if(yellowNote.noteLength==0) {
                     PlayScreen.noteStreak = 0;
+                    for (int i = 0; i < PlayScreen.LongNoteSet.size(); i++) {
+                        if(PlayScreen.LongNoteSet.get(i).yellowNote!=null) {
+                            if (yellowNote.noteY - 20 < PlayScreen.LongNoteSet.get(i).yellowNote.getBottomY() && yellowNote.getBottomY() > PlayScreen.LongNoteSet.get(i).yellowNote.getBottomY()) {
+                                PlayScreen.LongNoteSet.get(i).yellowNote.noteMissed();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -69,6 +90,13 @@ public class NoteSet {
                 NoteIsActive = false;
                 if(blueNote.noteLength==0) {
                     PlayScreen.noteStreak = 0;
+                    for (int i = 0; i < PlayScreen.LongNoteSet.size(); i++) {
+                        if(PlayScreen.LongNoteSet.get(i).blueNote!=null) {
+                            if (blueNote.noteY - 20 < PlayScreen.LongNoteSet.get(i).blueNote.getBottomY() && blueNote.getBottomY() > PlayScreen.LongNoteSet.get(i).blueNote.getBottomY()) {
+                                PlayScreen.LongNoteSet.get(i).blueNote.noteMissed();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -78,8 +106,16 @@ public class NoteSet {
                 NoteIsActive = false;
                 if(orangeNote.noteLength==0) {
                     PlayScreen.noteStreak = 0;
+                    for (int i =0; i<PlayScreen.LongNoteSet.size(); i++) {
+                        if(PlayScreen.LongNoteSet.get(i).orangeNote!=null) {
+                            if (orangeNote.noteY - 20 < PlayScreen.LongNoteSet.get(i).orangeNote.getBottomY() && orangeNote.getBottomY() > PlayScreen.LongNoteSet.get(i).orangeNote.getBottomY()) {
+                                PlayScreen.LongNoteSet.get(i).orangeNote.noteMissed();
+                            }
+                        }
+                    }
                 }
             }
         }
+
     }
 }

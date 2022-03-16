@@ -11,6 +11,8 @@ public class SongSelect extends MenuScreen {
     public SongSelect() {
 
         super();
+        buttons.add(new Button("Metallica - One", screenWidth / 2, screenHeight / 2 - 60, 20));
+        buttons.add(new Button("Dragonforce - Troopers Of The Stars", screenWidth / 2, screenHeight / 2 - 30, 20));
         buttons.add(new Button("Foghat - Slow Ride", screenWidth / 2, screenHeight / 2, 20));
         buttons.add(new Button("DA-games - build our machine", screenWidth / 2, screenHeight / 2 + 30, 20));
         buttons.add(new Button("Motley Crue - kickstart my heart", screenWidth / 2, screenHeight / 2 + 60, 20));
@@ -56,5 +58,17 @@ public class SongSelect extends MenuScreen {
             Game.playIsActive = true;
             Game.songSelectIsActive = false;
         }
+        if (buttons.get(activeButtonIndex).btntxt.equals("Dragonforce - Troopers Of The Stars")) {
+            songStitch.loadSong("src/main/resources/Dragonforce - Troopers Of The Stars");
+            Game.playIsActive = true;
+            Game.songSelectIsActive = false;
+        }
+        if (buttons.get(activeButtonIndex).btntxt.equals("Metallica - One")) {
+            songStitch.loadSong("src/main/resources/Metallica - One");
+            Game.playIsActive = true;
+            Game.songSelectIsActive = false;
+        }
+
+
     }
 }

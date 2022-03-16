@@ -156,14 +156,14 @@ public class PlayScreen {
         g.drawString("drawOrange: "+String.valueOf(drawGreen),20,120);
 
 
-        if(drawNoNoteWithCorrectFretsTest){
+       /* if(drawNoNoteWithCorrectFretsTest){
             g.drawImage(OrangeNoteSpark.image,200, 400, OrangeNoteSpark.Width, OrangeNoteSpark.Height, null);
 
         }
         if(drawNoNoteOnFretTest){
             g.drawImage(OrangeFire.image,300, 600, OrangeNoteSpark.Width, OrangeNoteSpark.Height, null);
-        }
-        Font myFont = new Font("TimesRoman", Font.BOLD, 40);
+        }*/
+       /* Font myFont = new Font("TimesRoman", Font.BOLD, 40);
         g.setFont(myFont);
         g.setColor(Color.RED);
         g.drawString("Notes on Screen"+String.valueOf(NoteSetList.size()),20,200);
@@ -171,7 +171,7 @@ public class PlayScreen {
         g.setColor(Color.RED);
         g.drawString("Notes on Fret:"+String.valueOf(notesOnFret),20,250);
         g.setColor(Color.RED);
-        g.drawString("Played Idx::"+String.valueOf(playedIndex),20,300);
+        g.drawString("Played Idx::"+String.valueOf(playedIndex),20,300);*/
 
     } //endregion
 

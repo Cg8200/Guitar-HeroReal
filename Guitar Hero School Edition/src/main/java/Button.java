@@ -42,7 +42,7 @@ public class Button {
              myFont = new Font("TimesRoman", Font.BOLD, btnHeight - 4);
              metrics = g.getFontMetrics(myFont);
             g.setColor(Color.black);
-            btnWidth = metrics.stringWidth(btntxt)+23;
+            btnWidth = metrics.stringWidth(btntxt)+45;
             g.drawImage(image,btnX, btnY-btnHeight, btnWidth, btnHeight, null);
 
         }

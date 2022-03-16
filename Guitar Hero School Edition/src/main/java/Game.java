@@ -32,8 +32,8 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
     enum ButtonCode {
         GREEN, RED, YELLOW, BLUE, ORANGE, STRUM_UP, STRUM_DOWN,  D_LEFT, D_RIGHT, BACK, START, BAD
     }
-public static boolean debugMode = true;
-    public static double debugRate = .25;
+public static boolean debugMode = false;
+    public static double debugRate = 1;
     public Game(){
         // region screen creation
         mainMenu = new MainMenu();
