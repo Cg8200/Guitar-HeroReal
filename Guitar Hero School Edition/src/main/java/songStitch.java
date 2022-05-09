@@ -13,9 +13,10 @@ public class songStitch {
    static int resolution = 192;
    static int BPM;
    static int TS;
-   public static int startTickNumber = 14592;
+  static int startTickNumber;
 
     public static void loadSong(String pathname) {
+        startTickNumber = Game.debugMode ? Game.startTickNumber :0;
         LinkedList<ChartNote> NotesList= new LinkedList<>();
 
         File f = new File(pathname+".txt");

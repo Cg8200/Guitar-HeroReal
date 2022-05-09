@@ -33,7 +33,8 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
         GREEN, RED, YELLOW, BLUE, ORANGE, STRUM_UP, STRUM_DOWN,  D_LEFT, D_RIGHT, BACK, START, BAD
     }
 public static boolean debugMode = false;
-    public static double debugRate = 1;
+    public static double debugRate = .25;
+    public static int startTickNumber = 1630;
     public Game(){
         // region screen creation
         mainMenu = new MainMenu();

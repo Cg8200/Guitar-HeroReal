@@ -61,7 +61,23 @@ public class PlayScreen {
     double totalNSsinceNote = 0;
     static long framelengthNS = 0;
     boolean strumHappened = false;
+    boolean greenJustPlayed = false;
+    boolean redJustPlayed = false;
+    boolean yellowJustPlayed = false;
+    boolean blueJustPlayed = false;
+    boolean orangeJustPlayed = false;
 
+    boolean greenJustReleased = false;
+    boolean redJustReleased = false;
+    boolean yellowJustReleased = false;
+    boolean blueJustReleased = false;
+    boolean orangeJustReleased = false;
+
+    Image prevGreenFret;
+    Image prevRedFret;
+    Image prevYellowFret;
+    Image prevBlueFret;
+    Image prevOrangeFret;
 
 
     static int noteStreak;
@@ -105,6 +121,12 @@ public class PlayScreen {
         YellowNoteSpark = new Image("src/main/resources/sparks.png",910, 880, 80, 80,false );
         BlueNoteSpark = new Image("src/main/resources/sparks.png",1010, 880, 80, 80,false);
         OrangeNoteSpark = new Image("src/main/resources/sparks.png",1110, 880, 80, 80,false);
+
+        prevGreenFret = GreenFret;
+        prevRedFret = RedFret;
+        prevYellowFret = YellowFret;
+        prevBlueFret = BlueFret;
+        prevOrangeFret = OrangeFret;
     }//endregion
 
 
@@ -177,6 +199,51 @@ public class PlayScreen {
 
 
     public void update() {
+        //region setup Justplayed and just released booleans
+        greenJustPlayed = false;
+        redJustPlayed = false;
+        yellowJustPlayed = false;
+        blueJustPlayed = false;
+        orangeJustPlayed = false;
+
+        greenJustReleased = false;
+        redJustReleased = false;
+        yellowJustReleased = false;
+        blueJustReleased = false;
+        orangeJustReleased = false;
+
+        if(prevGreenFret == GreenFretPlayed && GreenFret == GreenFretIdle){
+            greenJustReleased = true;
+        }
+        else if (prevGreenFret == GreenFretIdle && GreenFret == GreenFretPlayed) {
+            greenJustPlayed =true;
+        }
+        if(prevRedFret == RedFretPlayed && RedFret == RedFretIdle){
+            redJustReleased = true;
+        }
+        else if (prevRedFret == RedFretIdle && RedFret == RedFretPlayed) {
+            redJustPlayed =true;
+        }
+        if(prevYellowFret == YellowFretPlayed && YellowFret == YellowFretIdle){
+            yellowJustReleased = true;
+        }
+        else if (prevYellowFret == YellowFretIdle && YellowFret == YellowFretPlayed) {
+            yellowJustPlayed =true;
+        }
+        if(prevBlueFret == BlueFretPlayed && BlueFret == BlueFretIdle){
+            blueJustReleased = true;
+        }
+        else if (prevBlueFret == BlueFretIdle && BlueFret == BlueFretPlayed) {
+            blueJustPlayed =true;
+        }
+        if(prevOrangeFret == OrangeFretPlayed && OrangeFret == OrangeFretIdle){
+            orangeJustReleased = true;
+        }
+        else if (prevOrangeFret == OrangeFretIdle && OrangeFret == OrangeFretPlayed) {
+            orangeJustPlayed =true;
+        }
+        //endregion
+
         drawGreen = false;
         drawRed = false;
         drawYellow = false;
@@ -340,6 +407,62 @@ public class PlayScreen {
         //region tap notes
         else if (noteStreak >= 1) {
             if (aNoteOnFret(NoteSetList)) {
+
+                if(greenJustPlayed || redJustPlayed || yellowJustPlayed ||blueJustPlayed||orangeJustPlayed){
+                    if(isCurrentNoteWhite()){
+                        if(correctFretsJustPlayed(NoteSetList.get(0))){
+                            if (NoteSetList.get(0).greenNote != null){
+                                GreenFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).redNote != null){
+                                RedFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).yellowNote != null){
+                                YellowFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).blueNote != null){
+                                BlueFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).orangeNote != null){
+                                OrangeFire.DisplayFire();
+                            }
+                            NotePlayed(0);
+
+                                    NoteSetList.remove(0);
+
+                            }
+                        }
+
+                    }
+
+
+                  if(greenJustReleased || redJustReleased || yellowJustReleased ||blueJustReleased||orangeJustReleased){
+                    if(isCurrentNoteWhite()){
+                        if(CorrectFrets(false,NoteSetList.get(0))){
+                            if (NoteSetList.get(0).greenNote != null){
+                                GreenFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).redNote != null){
+                                RedFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).yellowNote != null){
+                                YellowFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).blueNote != null){
+                                BlueFire.DisplayFire();
+                            }
+                            if (NoteSetList.get(0).orangeNote != null){
+                                OrangeFire.DisplayFire();
+                            }
+                            NotePlayed(0);
+
+                                    NoteSetList.remove(0);
+
+                        }
+                    }
+
+                }
+                /*
                 if (CorrectFrets(true)) {
                     boolean isWhite = false;
                     if ((GreenFret==GreenFretPlayed)) {
@@ -374,8 +497,9 @@ public class PlayScreen {
                     if (isWhite) {
                         NotePlayed(0);
                     }
-                }
+                } */
             }
+
         }
         //endregion
 
@@ -468,6 +592,11 @@ public class PlayScreen {
 //fixme make it check all notes on fret to see if any are played
 
 
+        prevGreenFret = GreenFret;
+        prevRedFret = RedFret;
+        prevYellowFret = YellowFret;
+        prevBlueFret = BlueFret;
+        prevOrangeFret = OrangeFret;
 
     }
 
@@ -486,9 +615,11 @@ public class PlayScreen {
         }
         if (buttonCode == Game.ButtonCode.BLUE) {
             BlueFret = BlueFretPlayed;
+
         }
         if (buttonCode == Game.ButtonCode.ORANGE) {
             OrangeFret = OrangeFretPlayed;
+
         }
 
         if ((Game.ButtonCode.STRUM_UP == buttonCode || Game.ButtonCode.STRUM_DOWN == buttonCode)) {
@@ -542,17 +673,67 @@ public class PlayScreen {
 
     //region sets correct fret information
     public boolean CorrectFrets(boolean includeLastNote){
-        boolean GreenNoteExpected = NoteSetList.get(0).greenNote != null || (includeLastNote && lastNoteSetPlayed.greenNote != null);
-        boolean RedNoteExpected = NoteSetList.get(0).redNote != null|| (includeLastNote && lastNoteSetPlayed.redNote != null);;
-        boolean YellowNoteExpected = NoteSetList.get(0).yellowNote != null|| (includeLastNote && lastNoteSetPlayed.yellowNote != null);;
-        boolean BlueNoteExpected = NoteSetList.get(0).blueNote != null|| (includeLastNote && lastNoteSetPlayed.blueNote != null);;
-        boolean OrangeNoteExpected = NoteSetList.get(0).orangeNote != null|| (includeLastNote && lastNoteSetPlayed.orangeNote != null);;
+        boolean GreenNoteExpected = NoteSetList.get(0).greenNote != null;
+        boolean RedNoteExpected = NoteSetList.get(0).redNote != null;
+        boolean YellowNoteExpected = NoteSetList.get(0).yellowNote != null;
+        boolean BlueNoteExpected = NoteSetList.get(0).blueNote != null;
+        boolean OrangeNoteExpected = NoteSetList.get(0).orangeNote != null;
 
-        if (GreenNoteExpected == (GreenFret==GreenFretPlayed)
-                && RedNoteExpected == (RedFret==RedFretPlayed)
-                && YellowNoteExpected == (YellowFret==YellowFretPlayed)
-                && BlueNoteExpected == (BlueFret==BlueFretPlayed)
-                && OrangeNoteExpected == (OrangeFret==OrangeFretPlayed)){
+        boolean GreenNoteOptional = (includeLastNote && lastNoteSetPlayed.greenNote != null);
+        boolean RedNoteOptional = (includeLastNote && lastNoteSetPlayed.redNote != null);
+        boolean YellowNoteOptional = (includeLastNote && lastNoteSetPlayed.yellowNote != null);
+        boolean BlueNoteOptional =(includeLastNote && lastNoteSetPlayed.blueNote != null);
+        boolean OrangeNoteOptional = (includeLastNote && lastNoteSetPlayed.orangeNote != null);
+
+        boolean expectedNotesPlayed = true;
+        if(GreenNoteExpected && (GreenFret!=GreenFretPlayed)){
+            expectedNotesPlayed = false;
+        }
+        if(RedNoteExpected && (RedFret!=RedFretPlayed)){
+            expectedNotesPlayed = false;
+        }
+        if(YellowNoteExpected && (YellowFret!=YellowFretPlayed)){
+            expectedNotesPlayed = false;
+        }
+        if(BlueNoteExpected && (BlueFret!=BlueFretPlayed)){
+            expectedNotesPlayed = false;
+        }
+        if(OrangeNoteExpected && (OrangeFret!=OrangeFretPlayed)){
+            expectedNotesPlayed = false;
+        }
+
+        if(expectedNotesPlayed){
+            if (includeLastNote) {
+                return (GreenNoteExpected || GreenNoteOptional) == (GreenFret == GreenFretPlayed)
+                        && (RedNoteExpected || RedNoteOptional) == (RedFret == RedFretPlayed)
+                        && (YellowNoteExpected || YellowNoteOptional) == (YellowFret == YellowFretPlayed)
+                        && (BlueNoteExpected || BlueNoteOptional) == (BlueFret == BlueFretPlayed)
+                        && (OrangeNoteExpected || OrangeNoteOptional) == (OrangeFret == OrangeFretPlayed);
+            }
+            else{
+                return GreenNoteExpected == (GreenFret==GreenFretPlayed)
+                        && RedNoteExpected == (RedFret==RedFretPlayed)
+                        && YellowNoteExpected == (YellowFret==YellowFretPlayed)
+                        && BlueNoteExpected == (BlueFret==BlueFretPlayed)
+                        && OrangeNoteExpected == (OrangeFret==OrangeFretPlayed);
+            }
+        }
+
+        return false;
+    }
+
+    public boolean correctFretsJustPlayed(NoteSet noteSet){
+        boolean GreenNoteExpected = noteSet.greenNote != null;
+        boolean RedNoteExpected = noteSet.redNote != null;
+        boolean YellowNoteExpected = noteSet.yellowNote != null;
+        boolean BlueNoteExpected = noteSet.blueNote != null;
+        boolean OrangeNoteExpected = noteSet.orangeNote != null;
+
+        if (GreenNoteExpected == greenJustPlayed
+                && RedNoteExpected == redJustPlayed
+                && YellowNoteExpected == yellowJustPlayed
+                && BlueNoteExpected == blueJustPlayed
+                && OrangeNoteExpected == orangeJustPlayed){
             return true;
         }
         return false;
@@ -629,5 +810,24 @@ public class PlayScreen {
         catch(Exception e){
             System.out.println(e);
         }
+    }
+
+    public boolean isCurrentNoteWhite(){
+        if (NoteSetList.get(0).greenNote != null && NoteSetList.get(0).greenNote.noteType == Line.NoteType.white) {
+           return true;
+        }
+        if (NoteSetList.get(0).redNote != null && NoteSetList.get(0).redNote.noteType == Line.NoteType.white) {
+            return true;
+        }
+        if (NoteSetList.get(0).yellowNote != null && NoteSetList.get(0).yellowNote.noteType == Line.NoteType.white) {
+            return true;
+        }
+        if (NoteSetList.get(0).blueNote != null && NoteSetList.get(0).blueNote.noteType == Line.NoteType.white) {
+            return true;
+        }
+        if (NoteSetList.get(0).orangeNote != null && NoteSetList.get(0).orangeNote.noteType == Line.NoteType.white) {
+            return true;
+        }
+        return false;
     }
 }
