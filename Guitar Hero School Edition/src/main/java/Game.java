@@ -35,7 +35,8 @@ public class Game  implements ActionListener,KeyListener,MouseListener {
 public static boolean debugMode = false;
     public static double debugRate = .25;
     public static int startTickNumber = 1630;
-    public Game(){
+    public Game(){ //test
+int var1;
         // region screen creation
         mainMenu = new MainMenu();
         songSelect = new SongSelect();
